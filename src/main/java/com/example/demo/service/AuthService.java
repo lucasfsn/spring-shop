@@ -4,6 +4,7 @@ import com.example.demo.dto.user.AuthResDto;
 import com.example.demo.dto.user.UserSignupReqDto;
 import com.example.demo.dto.user.UserLoginReqDto;
 import com.example.demo.exception.AlreadyExistException;
+import com.example.demo.exception.InvalidDataException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.mapper.user.UserMapper;
 import com.example.demo.model.user.User;
@@ -28,11 +29,11 @@ public class AuthService {
     private final JwtService jwtService;
 
     public AuthResDto signUp(UserSignupReqDto request) {
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new AlreadyExistException("Email already taken");
         }
 
-        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+        if (userRepository.existsByUsername(request.getUsername())) {
             throw new AlreadyExistException("Username already taken");
         }
 
@@ -54,8 +55,9 @@ public class AuthService {
         User user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new ResourceNotFoundException("Invalid username or password"));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("Invalid username or password");
+            throw new InvalidDataException("Invalid username or password");
         }
+
         String token = jwtService.generateToken(user);
 
         return new AuthResDto(token, userMapper.toDto(user));

@@ -1,10 +1,13 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.user.ChangeUserRoleReqDto;
 import com.example.demo.dto.user.UpdateUserReqDto;
 import com.example.demo.dto.user.UserResDto;
+import com.example.demo.exception.AlreadyExistException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.mapper.user.UserMapper;
 import com.example.demo.model.user.User;
+import com.example.demo.model.user.UserRole;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,27 +23,33 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
 
+    public UserResDto getUser(UUID id) {
+        User user = getUserById(id);
+        return userMapper.toDto(user);
+    }
+
+    public UserResDto changeUserRole(UUID id, ChangeUserRoleReqDto role) {
+        User user = getUserById(id);
+        user.setRole(role.getRole());
+        User updatedUser = userRepository.save(user);
+        return userMapper.toDto(updatedUser);
+    }
+
     public UserResDto updateUser(UUID id, UpdateUserReqDto updateUserData) {
         User user = getUserById(id);
 
-        if (updateUserData.getFirstName() != null) {
-            user.setFirstName(updateUserData.getFirstName());
+        if (userRepository.existsByEmailAndIdIsNot(updateUserData.getEmail(), id)) {
+            throw new AlreadyExistException("Email already taken");
         }
-        if (updateUserData.getLastName() != null) {
-            user.setLastName(updateUserData.getLastName());
+
+        if (userRepository.existsByUsernameAndIdIsNot(updateUserData.getUsername(), id)) {
+            throw new AlreadyExistException("Username already taken");
         }
-        if (updateUserData.getEmail() != null) {
-            if (checkIfEmailExists(updateUserData.getEmail(), id)) {
-                throw new BadCredentialsException("Email already taken");
-            }
-            user.setEmail(updateUserData.getEmail());
-        }
-        if (updateUserData.getUsername() != null) {
-            if (checkIfUsernameExists(updateUserData.getUsername(), id)) {
-                throw new BadCredentialsException("Username already taken");
-            }
-            user.setUsername(updateUserData.getUsername());
-        }
+
+        user.setFirstName(updateUserData.getFirstName());
+        user.setLastName(updateUserData.getLastName());
+        user.setEmail(updateUserData.getEmail());
+        user.setUsername(updateUserData.getUsername());
         if (updateUserData.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(updateUserData.getPassword()));
         }
@@ -49,25 +58,7 @@ public class UserService {
         return userMapper.toDto(updatedUser);
     }
 
-    public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User not found"));
-    }
-
     private User getUserById(UUID id) {
         return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
-
-    private boolean checkIfUsernameExists(String username, UUID currentUserId) {
-        return userRepository.findByUsername(username)
-                .filter(user -> !user.getId().equals(currentUserId))
-                .isPresent();
-    }
-
-    private boolean checkIfEmailExists(String email, UUID currentUserId) {
-        return userRepository.findByEmail(email)
-                .filter(user -> !user.getId().equals(currentUserId))
-                .isPresent();
-    }
-
-
 }

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop</title>
+    <link th:href="@{/styles/main.css}" rel="stylesheet">
+</head>
+<body>
+    <div class="page">
+        <nav>
+            <a th:href="@{'/'}">
+                <img src="/images/cart.png" alt="Logo">
+            </a>
+            <div class="nav-buttons" th:if="${session.user != null}">
+                <a th:href="@{'/products'}">Products</a>
+                <a th:unless="${session.user.isAdmin()}" th:href="@{'/orders'}">Orders</a>
+                <a th:unless="${session.user.isAdmin()}" th:href="@{'/cart'}">Cart</a>
+                <a th:unless="${session.user.isAdmin()}" th:href="@{'/users'}">Profile</a>
+                <a th:href="@{'/auth/logout'}">Logout</a>
+            </div>
+            <div class="nav-buttons" th:if="${session.user == null}">
+                <a th:href="@{'/auth/login'}">Login</a>
+                <a th:href="@{'/auth/signup'}">Signup</a>
+            </div>
+        </nav>
+        <form action="/auth/signup" th:object="${signupForm}" method="post">
+            <h1 class="title">Signup</h1>
+            <div class="form-row">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" th:field="*{firstName}" />
+                <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="error"></div>
+            </div>
+            <div class="form-row">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" th:field="*{lastName}" />
+                <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="error"></div>
+            </div>
+            <div class="form-row">
+                <label for="username">Username</label>
+                <input type="text" id="username" th:field="*{username}" />
+                <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="error"></div>
+            </div>
+            <div class="form-row">
+                <label for="email">Email</label>
+                <input type="email" id="email" th:field="*{email}" />
+                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></div>
+            </div>
+            <div class="form-row">
+                <label for="password">Password</label>
+                <input type="password" id="password" th:field="*{password}" />
+                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></div>
+            </div>
+            <div th:if="${error}" class="error-service">
+                <p th:text="${error}"></p>
+            </div>
+            <button class="btn" type="submit">Sign Up</button>
+        </form>
+    </div>
+</body>
+</html>

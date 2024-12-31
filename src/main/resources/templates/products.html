@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop</title>
+    <link th:href="@{/styles/main.css}" rel="stylesheet">
+</head>
+<body>
+<div class="page">
+    <nav>
+        <a th:href="@{'/'}">
+            <img src="/images/cart.png" alt="Logo">
+        </a>
+        <div class="nav-buttons" th:if="${session.user != null}">
+            <a th:href="@{'/products'}">Products</a>
+            <a th:unless="${session.user.isAdmin()}" th:href="@{'/orders'}">Orders</a>
+            <a th:unless="${session.user.isAdmin()}" th:href="@{'/cart'}">Cart</a>
+            <a th:unless="${session.user.isAdmin()}" th:href="@{'/users'}">Profile</a>
+            <a th:href="@{'/auth/logout'}">Logout</a>
+        </div>
+        <div class="nav-buttons" th:if="${session.user == null}">
+            <a th:href="@{'/auth/login'}">Login</a>
+            <a th:href="@{'/auth/signup'}">Signup</a>
+        </div>
+    </nav>
+    <a th:if="${session.user != null and session.user.isAdmin()}" th:href="@{'/products/add'}">
+        <button class="btn" type="button">Add New Product</button>
+    </a>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Is Available</th>
+            <th>Quantity</th>
+            <th>Categories</th>
+            <th th:if="${session.user != null and session.user.isAdmin()}">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.description}"></td>
+            <td th:text="${product.price}"></td>
+            <td th:text="${product.available}"></td>
+            <td th:text="${product.quantity}"></td>
+            <td>
+                <span th:each="category, iStat : ${product.categories}" th:text="${iStat.last ? category.name : category.name + ', '}"></span>
+            </td>
+            <td th:if="${session.user != null and session.user.isAdmin()}" class="table-buttons">
+                <a th:href="@{'/products/edit/' + ${product.id}}">
+                    <button class="btn" type="button">Edit</button>
+                </a>
+                <a th:href="@{'/products/delete/' + ${product.id}}"
+                   onclick="return confirm('Are you sure you want to delete this product?');">
+                    <button class="btn" type="button">Delete</button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

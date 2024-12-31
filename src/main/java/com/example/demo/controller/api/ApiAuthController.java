@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.controller.api;
 
 import com.example.demo.dto.user.AuthResDto;
 import com.example.demo.dto.user.UserLoginReqDto;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class ApiAuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")

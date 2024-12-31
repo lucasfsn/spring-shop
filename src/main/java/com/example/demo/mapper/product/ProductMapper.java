@@ -53,14 +53,6 @@ public class ProductMapper {
         product.setAvailable(productDto.isAvailable());
         product.setQuantity(productDto.getQuantity());
 
-        if (productDto.getCategories() != null) {
-            List<Category> categories = productDto.getCategories()
-                    .stream()
-                    .map(categoryMapper::toEntity)
-                    .collect(Collectors.toList());
-            product.setCategories(categories);
-        }
-
         return product;
     }
 }

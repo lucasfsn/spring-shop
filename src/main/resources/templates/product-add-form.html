@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop</title>
+    <link th:href="@{/styles/main.css}" rel="stylesheet">
+</head>
+<body>
+<div class="page">
+    <nav>
+        <a th:href="@{'/'}">
+            <img src="/images/cart.png" alt="Logo">
+        </a>
+        <div class="nav-buttons" th:if="${session.user != null}">
+            <a th:href="@{'/products'}">Products</a>
+            <a th:unless="${session.user.isAdmin()}" th:href="@{'/orders'}">Orders</a>
+            <a th:unless="${session.user.isAdmin()}" th:href="@{'/cart'}">Cart</a>
+            <a th:unless="${session.user.isAdmin()}" th:href="@{'/users'}">Profile</a>
+            <a th:href="@{'/auth/logout'}">Logout</a>
+        </div>
+        <div class="nav-buttons" th:if="${session.user == null}">
+            <a th:href="@{'/auth/login'}">Login</a>
+            <a th:href="@{'/auth/signup'}">Signup</a>
+        </div>
+    </nav>
+    <form action="/products/add" th:object="${productAddForm}" method="post">
+        <h1 class="title">Add Product</h1>
+        <div class="form-row">
+            <label for="name">Name</label>
+            <input type="text" id="name" th:field="*{name}" required />
+            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error"></div>
+        </div>
+        <div class="form-row">
+            <label for="description">Description</label>
+            <input type="text" id="description" th:field="*{description}" required />
+            <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="error"></div>
+        </div>
+        <div class="form-row">
+            <label for="price">Price</label>
+            <input type="number" id="price" th:field="*{price}" step="0.01" required />
+            <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="error"></div>
+        </div>
+        <div class="form-row">
+            <label for="available">Available</label>
+            <input type="checkbox" id="available" th:field="*{available}" />
+            <div th:if="${#fields.hasErrors('available')}" th:errors="*{available}" class="error"></div>
+        </div>
+        <div class="form-row">
+            <label for="quantity">Quantity</label>
+            <input type="number" id="quantity" th:field="*{quantity}" min="0" required />
+            <div th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}" class="error"></div>
+        </div>
+        <div class="form-row">
+            <label for="categories">Categories</label>
+            <select id="categories" th:field="*{categories}" multiple>
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">
+                </option>
+            </select>
+            <div th:if="${#fields.hasErrors('categories')}" th:errors="*{categories}" class="error"></div>
+        </div>
+        <button class="btn" type="submit">Add Product</button>
+    </form>
+</div>
+</body>
+</html>

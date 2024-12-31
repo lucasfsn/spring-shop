@@ -13,4 +13,8 @@ public class UserResDto {
     private String username;
     private String email;
     private UserRole role;
+
+    public boolean isAdmin() {
+        return UserRole.ADMIN.equals(role);
+    }
 }
