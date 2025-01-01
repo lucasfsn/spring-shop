@@ -7,6 +7,7 @@ import com.example.demo.exception.AlreadyExistException;
 import com.example.demo.exception.InvalidDataException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.mapper.user.UserMapper;
+import com.example.demo.model.cart.Cart;
 import com.example.demo.model.user.User;
 import com.example.demo.model.user.UserRole;
 import com.example.demo.repository.UserRepository;
@@ -21,7 +22,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Transactional
 public class AuthService {
-    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -40,6 +40,10 @@ public class AuthService {
         User user = userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(UserRole.CUSTOMER);
+
+        Cart cart = new Cart();
+        cart.setUser(user);
+        user.setCart(cart);
 
         User savedUser = userRepository.save(user);
         String token = jwtService.generateToken(savedUser);

@@ -15,7 +15,7 @@
                 <a th:href="@{'/products'}">Products</a>
                 <a th:unless="${session.user.isAdmin()}" th:href="@{'/orders'}">Orders</a>
                 <a th:unless="${session.user.isAdmin()}" th:href="@{'/cart'}">Cart</a>
-                <a th:unless="${session.user.isAdmin()}" th:href="@{'/users'}">Profile</a>
+                <a th:if="${session.user.isAdmin()}" th:href="@{'/admin'}">Panel</a>
                 <a th:href="@{'/auth/logout'}">Logout</a>
             </div>
             <div class="nav-buttons" th:if="${session.user == null}">

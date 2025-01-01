@@ -68,6 +68,11 @@ form {
     color: darkred;
 }
 
+.api-error {
+    color: darkred;
+    text-align: center;
+}
+
 .error-service {
     text-align: center;
 }

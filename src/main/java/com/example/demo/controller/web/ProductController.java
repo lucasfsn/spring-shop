@@ -1,12 +1,8 @@
 package com.example.demo.controller.web;
 
 import com.example.demo.dto.product.ProductReqDto;
-import com.example.demo.dto.user.AuthResDto;
-import com.example.demo.dto.user.UserResDto;
 import com.example.demo.service.CategoryService;
 import com.example.demo.service.ProductService;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.Data;
 import org.springframework.stereotype.Controller;
@@ -24,8 +20,7 @@ public class ProductController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public String products(Model model, HttpSession httpSession) {
-        UserResDto user = (UserResDto) httpSession.getAttribute("user");
+    public String products(Model model) {
         model.addAttribute("products", productService.getProducts());
         return "products";
     }

@@ -15,7 +15,7 @@
             <a th:href="@{'/products'}">Products</a>
             <a th:unless="${session.user.isAdmin()}" th:href="@{'/orders'}">Orders</a>
             <a th:unless="${session.user.isAdmin()}" th:href="@{'/cart'}">Cart</a>
-            <a th:unless="${session.user.isAdmin()}" th:href="@{'/users'}">Profile</a>
+            <a th:if="${session.user.isAdmin()}" th:href="@{'/admin'}">Panel</a>
             <a th:href="@{'/auth/logout'}">Logout</a>
         </div>
         <div class="nav-buttons" th:if="${session.user == null}">
@@ -35,7 +35,7 @@
             <th>Is Available</th>
             <th>Quantity</th>
             <th>Categories</th>
-            <th th:if="${session.user != null and session.user.isAdmin()}">Actions</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -57,9 +57,15 @@
                     <button class="btn" type="button">Delete</button>
                 </a>
             </td>
+            <td th:if="${session.user != null and !session.user.isAdmin()}" class="table-buttons">
+                <a th:href="@{'/cart/products/' + ${product.id} + '/add'}">
+                    <button class="btn" type="button">Add to cart</button>
+                </a>
+            </td>
         </tr>
         </tbody>
     </table>
+    <div th:if="${error != null}" th:text="${error}" class="api-error"></div>
 </div>
 </body>
 </html>

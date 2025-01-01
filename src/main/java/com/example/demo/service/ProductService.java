@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import com.example.demo.dto.product.ProductReqDto;
 import com.example.demo.dto.product.ProductResDto;
-import com.example.demo.exception.InvalidDataException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.mapper.product.ProductMapper;
 import com.example.demo.model.category.Category;
@@ -80,7 +79,7 @@ public class ProductService {
         return productMapper.toDto(createdProduct);
     }
 
-    private Product getProductById(UUID id) {
+    public Product getProductById(UUID id) {
         return productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 }
