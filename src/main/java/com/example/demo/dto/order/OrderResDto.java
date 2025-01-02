@@ -9,9 +9,7 @@ import java.util.UUID;
 @Data
 public class OrderResDto {
     private UUID id;
-    private UUID userId;
-    private LocalDateTime orderDate;
+    private LocalDateTime createdAt;
     private DeliveryInfoDto deliveryInfo;
-    private double totalPrice;
-    private List<OrderElementResDto> orderElements;
+    private List<OrderProductDto> products;
 }

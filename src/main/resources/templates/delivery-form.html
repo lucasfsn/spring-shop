@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop</title>
+    <link th:href="@{/styles/main.css}" rel="stylesheet">
+</head>
+<body>
+<div class="page">
+    <nav>
+        <a th:href="@{'/'}">
+            <img src="/images/cart.png" alt="Logo">
+        </a>
+        <div class="nav-buttons" th:if="${session.user != null}">
+            <a th:href="@{'/products'}">Products</a>
+            <a th:unless="${session.user.isAdmin()}" th:href="@{'/orders'}">Orders</a>
+            <a th:unless="${session.user.isAdmin()}" th:href="@{'/cart'}">Cart</a>
+            <a th:if="${session.user.isAdmin()}" th:href="@{'/admin'}">Panel</a>
+            <a th:href="@{'/auth/logout'}">Logout</a>
+        </div>
+        <div class="nav-buttons" th:if="${session.user == null}">
+            <a th:href="@{'/auth/login'}">Login</a>
+            <a th:href="@{'/auth/signup'}">Signup</a>
+        </div>
+    </nav>
+    <form action="/orders/create" th:object="${deliveryInfoForm}" method="post">
+        <h1 class="title">Make New Order</h1>
+        <div class="form-row">
+            <label for="email">Email</label>
+            <input type="text" id="email" th:field="*{email}" required/>
+            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></div>
+        </div>
+        <div class="form-row">
+            <label for="phoneNumber">Phone number</label>
+            <input type="text" id="phoneNumber" th:field="*{phoneNumber}" required/>
+            <div th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="error"></div>
+        </div>
+        <div class="form-row">
+            <label for="street">Street</label>
+            <input type="text" id="street" th:field="*{street}" required/>
+            <div th:if="${#fields.hasErrors('street')}" th:errors="*{street}" class="error"></div>
+        </div>
+        <div class="form-row">
+            <label for="houseNumber">House number</label>
+            <input type="text" id="houseNumber" th:field="*{houseNumber}"/>
+            <div th:if="${#fields.hasErrors('houseNumber')}" th:errors="*{houseNumber}" class="error"></div>
+        </div>
+        <div class="form-row">
+            <label for="flatNumber">Flat number</label>
+            <input type="text" id="flatNumber" th:field="*{flatNumber}"/>
+            <div th:if="${#fields.hasErrors('flatNumber')}" th:errors="*{flatNumber}" class="error"></div>
+        </div>
+        <div class="form-row">
+            <label for="city">City</label>
+            <input type="text" id="city" th:field="*{city}" required/>
+            <div th:if="${#fields.hasErrors('city')}" th:errors="*{city}" class="error"></div>
+        </div>
+        <div class="form-row">
+            <label for="postalCode">Postal Code</label>
+            <input type="text" id="postalCode" th:field="*{postalCode}" required/>
+            <div th:if="${#fields.hasErrors('city')}" th:errors="*{postalCode}" class="error"></div>
+        </div>
+        <div class="form-row">
+            <label for="country">Country</label>
+            <input type="text" id="country" th:field="*{country}" required/>
+            <div th:if="${#fields.hasErrors('city')}" th:errors="*{country}" class="error"></div>
+        </div>
+        <button class="btn" type="submit">Create</button>
+    </form>
+</div>
+</body>
+</html>

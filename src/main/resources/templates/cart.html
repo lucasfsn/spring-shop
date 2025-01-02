@@ -1,68 +1,73 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Shop</title>
-  <link th:href="@{/styles/main.css}" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Shop</title>
+    <link th:href="@{/styles/main.css}" rel="stylesheet">
 </head>
 <body>
 <div class="page">
-  <nav>
-    <a th:href="@{'/'}">
-      <img src="/images/cart.png" alt="Logo">
-    </a>
-    <div class="nav-buttons" th:if="${session.user != null}">
-      <a th:href="@{'/products'}">Products</a>
-      <a th:unless="${session.user.isAdmin()}" th:href="@{'/orders'}">Orders</a>
-      <a th:unless="${session.user.isAdmin()}" th:href="@{'/cart'}">Cart</a>
-      <a th:if="${session.user.isAdmin()}" th:href="@{'/admin'}">Panel</a>
-      <a th:href="@{'/auth/logout'}">Logout</a>
-    </div>
-    <div class="nav-buttons" th:if="${session.user == null}">
-      <a th:href="@{'/auth/login'}">Login</a>
-      <a th:href="@{'/auth/signup'}">Signup</a>
-    </div>
-  </nav>
+    <nav>
+        <a th:href="@{'/'}">
+            <img src="/images/cart.png" alt="Logo">
+        </a>
+        <div class="nav-buttons" th:if="${session.user != null}">
+            <a th:href="@{'/products'}">Products</a>
+            <a th:unless="${session.user.isAdmin()}" th:href="@{'/orders'}">Orders</a>
+            <a th:unless="${session.user.isAdmin()}" th:href="@{'/cart'}">Cart</a>
+            <a th:if="${session.user.isAdmin()}" th:href="@{'/admin'}">Panel</a>
+            <a th:href="@{'/auth/logout'}">Logout</a>
+        </div>
+        <div class="nav-buttons" th:if="${session.user == null}">
+            <a th:href="@{'/auth/login'}">Login</a>
+            <a th:href="@{'/auth/signup'}">Signup</a>
+        </div>
+    </nav>
     <table>
-      <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Unit Price</th>
-        <th>Quantity</th>
-        <th>Categories</th>
-        <th>Total Price</th>
-        <th>Actions</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr th:each="element : ${cart.elements}">
-        <td th:text="${element.productName}"></td>
-        <td th:text="${element.productDescription}"></td>
-        <td th:text="${element.productPrice}"></td>
-        <td>
-          <form th:action="@{'/cart/products/' + ${element.productId} + '/quantity'}" method="post">
-            <input type="number" name="quantity" aria-label="Quantity for product" th:value="${element.quantity}" min="1">
-            <div th:if="${errors != null and errors[element.productId] != null}"
-                 th:text="${errors[element.productId]}"
-                 class="error">
-            </div>
-            <button class="btn" type="submit">Update</button>
-          </form>
-        </td>
-        <td>
-          <span th:each="category, iStat : ${element.productCategories}" th:text="${iStat.last ? category.name : category.name + ', '}"></span>
-        </td>
-        <td th:text="${element.productPrice * element.quantity}"></td>
-        <td class="table-buttons">
-          <a th:href="@{'/cart/products/' + ${element.productId} + '/remove'}"
-             onclick="return confirm('Are you sure you want to delete this product from cart?');">
-            <button class="btn" type="button">Delete</button>
-          </a>
-        </td>
-      </tr>
-      </tbody>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Unit Price</th>
+            <th>Quantity</th>
+            <th>Categories</th>
+            <th>Total Price</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="element : ${cart.elements}">
+            <td th:text="${element.productName}"></td>
+            <td th:text="${element.productDescription}"></td>
+            <td th:text="${element.productPrice}"></td>
+            <td>
+                <form th:action="@{'/cart/products/' + ${element.productId} + '/quantity'}" method="post">
+                    <input type="number" name="quantity" aria-label="Quantity for product"
+                           th:value="${element.quantity}" min="1">
+                    <div th:if="${errors != null and errors[element.productId] != null}"
+                         th:text="${errors[element.productId]}"
+                         class="error">
+                    </div>
+                    <button class="btn" type="submit">Update</button>
+                </form>
+            </td>
+            <td>
+                <span th:each="category, iStat : ${element.productCategories}"
+                      th:text="${iStat.last ? category.name : category.name + ', '}"></span>
+            </td>
+            <td th:text="${element.productPrice * element.quantity}"></td>
+            <td class="table-buttons">
+                <a th:href="@{'/cart/products/' + ${element.productId} + '/remove'}"
+                   onclick="return confirm('Are you sure you want to delete this product from cart?');">
+                    <button class="btn" type="button">Delete</button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
     </table>
-  </div>
+    <a th:if="${session.user != null and !cart.elements.isEmpty()}" th:href="@{'/orders/create'}" class="btn-wrapper">
+        <button class="btn" type="button">Make order</button>
+    </a>
+</div>
 </body>
 </html>

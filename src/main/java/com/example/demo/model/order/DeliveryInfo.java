@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -35,7 +34,6 @@ public class DeliveryInfo {
     @NotBlank(message = "House number should not be blank")
     private String houseNumber;
 
-    @NotBlank(message = "Flat number should not be blank")
     private String flatNumber;
 
     @NotBlank(message = "City should not be blank")
@@ -50,6 +48,6 @@ public class DeliveryInfo {
     @Size(min = 3, message = "Country should have at least 3 characters")
     private String country;
 
-    @OneToMany(mappedBy = "deliveryInfo")
-    private List<Order> orders;
+    @OneToOne(mappedBy = "deliveryInfo")
+    private Order order;
 }

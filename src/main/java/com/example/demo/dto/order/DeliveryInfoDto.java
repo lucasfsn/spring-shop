@@ -5,11 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-import java.util.UUID;
-
 @Data
 public class DeliveryInfoDto {
-    private UUID id;
     @Email(message = "Email should be valid")
     @NotBlank(message = "Email should not be blank")
     private String email;
@@ -21,7 +18,6 @@ public class DeliveryInfoDto {
     private String street;
     @NotBlank(message = "House number should not be blank")
     private String houseNumber;
-    @NotBlank(message = "Flat number should not be blank")
     private String flatNumber;
     @NotBlank(message = "City should not be blank")
     @Size(min = 3, message = "City should have at least 3 characters")

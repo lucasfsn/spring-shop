@@ -30,7 +30,6 @@ public class DeliveryInfoMapper {
         }
 
         DeliveryInfoDto dto = new DeliveryInfoDto();
-        dto.setId(entity.getId());
         dto.setEmail(entity.getEmail());
         dto.setPhoneNumber(entity.getPhoneNumber());
         dto.setStreet(entity.getStreet());

@@ -1,0 +1,42 @@
+package com.example.demo.controller.api;
+
+import com.example.demo.dto.order.DeliveryInfoDto;
+import com.example.demo.dto.order.OrderResDto;
+import com.example.demo.service.OrderService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/orders")
+@RequiredArgsConstructor
+public class ApiOrderController {
+    private final OrderService orderService;
+
+    @GetMapping
+    public ResponseEntity<List<OrderResDto>> getCategories(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(orderService.getOrders(userDetails));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderResDto> getOrder(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID id) {
+        return ResponseEntity.ok(orderService.getOrder(userDetails, id));
+    }
+
+    @PostMapping
+    public ResponseEntity<OrderResDto> createOrder(@AuthenticationPrincipal UserDetails userDetails, @RequestBody DeliveryInfoDto deliveryInfoDto) {
+        System.out.println(deliveryInfoDto);
+        return ResponseEntity.ok(orderService.createOrder(userDetails, deliveryInfoDto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteOrder(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID id) {
+        orderService.deleteOrder(userDetails, id);
+        return ResponseEntity.noContent().build();
+    }
+}

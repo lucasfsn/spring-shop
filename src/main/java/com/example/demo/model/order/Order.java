@@ -2,11 +2,10 @@ package com.example.demo.model.order;
 
 import com.example.demo.model.user.User;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,15 +25,12 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "delivery_info_id", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private DeliveryInfo deliveryInfo;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderElement> orderElements;
 
-    private LocalDateTime orderDate;
-
-    @Positive(message = "Total price should be positive")
-    private double totalPrice;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 }

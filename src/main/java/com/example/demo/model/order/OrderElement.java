@@ -30,8 +30,4 @@ public class OrderElement {
     @NotNull(message = "Quantity should not be null")
     @Positive(message = "Quantity should be positive")
     private int quantity;
-
-    @NotNull(message = "Price should not be null")
-    @Positive(message = "Price should be positive")
-    private double price;
 }

@@ -107,12 +107,17 @@ public class CartService {
         return cartMapper.toDto(savedCart);
     }
 
-    private Cart getCartByUsername(String username) {
+    public Cart getCartByUsername(String username) {
         return cartRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("Cart not found for this user"));
+    }
+
+    public void clearCart(String username) {
+        Cart cart = getCartByUsername(username);
+        cart.getCartElements().clear();
+        cartRepository.save(cart);
     }
 
     private CartElement getCartElementByProductIdAndCartId(UUID productId, UUID cartId) {
         return cartRepository.findCartElementByProductIdAndCartId(productId, cartId).orElseThrow(() -> new ResourceNotFoundException("Cart element not found"));
     }
-
 }

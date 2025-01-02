@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop</title>
+    <link th:href="@{/styles/main.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/js/script.js}"></script>
+</head>
+<body>
+<div class="page">
+    <nav>
+        <a th:href="@{'/'}">
+            <img src="/images/cart.png" alt="Logo">
+        </a>
+        <div class="nav-buttons" th:if="${session.user != null}">
+            <a th:href="@{'/products'}">Products</a>
+            <a th:unless="${session.user.isAdmin()}" th:href="@{'/orders'}">Orders</a>
+            <a th:unless="${session.user.isAdmin()}" th:href="@{'/cart'}">Cart</a>
+            <a th:if="${session.user.isAdmin()}" th:href="@{'/admin'}">Panel</a>
+            <a th:href="@{'/auth/logout'}">Logout</a>
+        </div>
+        <div class="nav-buttons" th:if="${session.user == null}">
+            <a th:href="@{'/auth/login'}">Login</a>
+            <a th:href="@{'/auth/signup'}">Signup</a>
+        </div>
+    </nav>
+    <table>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Created at</th>
+            <th>Products</th>
+            <th>Total price</th>
+            <th>Delivery info</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}" class="order">
+            <td th:text="${order.id}"></td>
+            <td th:text="${order.createdAt}"></td>
+            <td class="order-products">
+                <div th:each="product : ${order.products}" class="product">
+                    <p>
+                        Product:
+                        <span th:text="${product.name}"></span>
+                    </p>
+                    <p>
+                        Description:
+                        <span th:text="${product.description}"></span>
+                    </p>
+                    <p>
+                        Price per unit:
+                        <span class="price" th:text="${product.price}"></span>
+                    </p>
+                    <p>
+                        Quantity:
+                        <span class="quantity" th:text="${product.quantity}"></span>
+                    </p>
+                </div>
+            </td>
+            <td>
+                Total Price:
+                <span class="totalPrice"></span>
+            </td>
+            <td>
+                <p>
+                    Email:
+                    <span th:text="${order.deliveryInfo.email}"></span>
+                </p>
+                <p>
+                    Phone number:
+                    <span th:text="${order.deliveryInfo.phoneNumber}"></span>
+                </p>
+                <p>
+                    <span th:text="${order.deliveryInfo.street} + ' ' + ${order.deliveryInfo.houseNumber}"></span>
+                    <span th:if="${order.deliveryInfo.flatNumber != null}"
+                          th:text="' / ' + ${order.deliveryInfo.flatNumber}"></span>
+                </p>
+                <p>
+                    <span th:text="${order.deliveryInfo.postalCode} + ' ' + ${order.deliveryInfo.city} + ', ' + ${order.deliveryInfo.country}"></span>
+                </p>
+            </td>
+            <td class="table-buttons">
+                <a th:href="@{'/orders/delete/' + ${order.id}}"
+                   onclick="return confirm('Are you sure you want to cancel this order?');">
+                    <button class="btn" type="button">Cancel</button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

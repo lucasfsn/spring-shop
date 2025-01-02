@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.View;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +21,6 @@ import java.util.UUID;
 public class CartController {
     private final CartService cartService;
     private final ProductService productService;
-    private final View error;
 
     @GetMapping
     public String getCart(Model model, @AuthenticationPrincipal UserDetails userDetails) {
