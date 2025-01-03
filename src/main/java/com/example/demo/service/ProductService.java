@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.product.ProductReqDto;
 import com.example.demo.dto.product.ProductResDto;
+import com.example.demo.dto.product.ProductSearchDto;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.mapper.product.ProductMapper;
 import com.example.demo.model.category.Category;
@@ -10,6 +11,10 @@ import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -38,12 +43,25 @@ public class ProductService {
         return productMapper.toDto(product);
     }
 
-    public List<ProductResDto> getProducts() {
-        List<Product> products = productRepository.findAll();
-
-        return products.stream()
-                .map(productMapper::toDto)
-                .toList();
+    public Page<ProductResDto> getProducts(ProductSearchDto searchDto) {
+        Sort.Direction sortDirection = Sort.Direction.fromString(searchDto.getSortOrder().toUpperCase());
+        Pageable pageable = PageRequest.of(
+                searchDto.getPage(),
+                searchDto.getSize(),
+                Sort.by(sortDirection, searchDto.getSortBy())
+        );
+        Page<Product> products = productRepository.searchProducts(
+                searchDto.getName(),
+                searchDto.getDescription(),
+                searchDto.getCategory(),
+                searchDto.getMinPrice(),
+                searchDto.getMaxPrice(),
+                searchDto.getMinQuantity(),
+                searchDto.getMaxQuantity(),
+                searchDto.getAvailable(),
+                pageable
+        );
+        return products.map(productMapper::toDto);
     }
 
     public ProductResDto updateProduct(UserDetails userDetails, UUID id, ProductReqDto productData) {
@@ -54,7 +72,7 @@ public class ProductService {
         if (categories.size() != productData.getCategories().size()) {
             throw new ResourceNotFoundException("All categories have not been found");
         }
-        
+
         Product updatedProduct = productMapper.toExistingEntity(getProductById(id), productData, categories);
         Product savedProduct = productRepository.save(updatedProduct);
         return productMapper.toDto(savedProduct);

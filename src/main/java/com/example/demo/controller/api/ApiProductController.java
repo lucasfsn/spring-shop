@@ -2,15 +2,16 @@ package com.example.demo.controller.api;
 
 import com.example.demo.dto.product.ProductReqDto;
 import com.example.demo.dto.product.ProductResDto;
+import com.example.demo.dto.product.ProductSearchDto;
 import com.example.demo.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -20,8 +21,8 @@ public class ApiProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<ProductResDto>> getProducts() {
-        return ResponseEntity.ok(productService.getProducts());
+    public ResponseEntity<Page<ProductResDto>> getProducts(ProductSearchDto paramsDto) {
+        return ResponseEntity.ok(productService.getProducts(paramsDto));
     }
 
     @GetMapping("/{id}")

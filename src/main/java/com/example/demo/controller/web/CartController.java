@@ -1,6 +1,7 @@
 package com.example.demo.controller.web;
 
 import com.example.demo.dto.cart.CartQuantityReqDto;
+import com.example.demo.dto.product.ProductSearchDto;
 import com.example.demo.service.CartService;
 import com.example.demo.service.ProductService;
 import jakarta.validation.Valid;
@@ -40,7 +41,7 @@ public class CartController {
             cartService.addToCart(userDetails, productId);
             return "redirect:/cart";
         } catch (Exception e) {
-            model.addAttribute("products", productService.getProducts());
+            model.addAttribute("products", productService.getProducts(new ProductSearchDto()));
             model.addAttribute("error", e.getMessage());
             return "products";
         }

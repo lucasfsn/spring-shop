@@ -1,6 +1,7 @@
 package com.example.demo.controller.web;
 
 import com.example.demo.dto.product.ProductReqDto;
+import com.example.demo.dto.product.ProductSearchDto;
 import com.example.demo.service.CategoryService;
 import com.example.demo.service.ProductService;
 import jakarta.validation.Valid;
@@ -22,8 +23,8 @@ public class ProductController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public String products(Model model) {
-        model.addAttribute("products", productService.getProducts());
+    public String products(ProductSearchDto paramsDto, Model model) {
+        model.addAttribute("products", productService.getProducts(paramsDto));
         return "products";
     }
 
