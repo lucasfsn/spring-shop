@@ -25,7 +25,7 @@ public class ApiCartController {
 
     @PostMapping("/products/{productId}")
     public ResponseEntity<CartDto> addToCart(@PathVariable UUID productId, @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(cartService.addToCart(userDetails, productId));
+        return ResponseEntity.status(201).body(cartService.addToCart(userDetails, productId));
     }
 
     @DeleteMapping("/products/{productId}")

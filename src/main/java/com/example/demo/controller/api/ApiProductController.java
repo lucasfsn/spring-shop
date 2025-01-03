@@ -42,6 +42,6 @@ public class ApiProductController {
 
     @PostMapping
     public ResponseEntity<ProductResDto> createProduct(@RequestBody @Valid ProductReqDto productData, @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(productService.createProduct(userDetails, productData));
+        return ResponseEntity.status(201).body(productService.createProduct(userDetails, productData));
     }
 }

@@ -31,7 +31,7 @@ public class ApiOrderController {
 
     @PostMapping
     public ResponseEntity<OrderCreateDto> createOrder(@RequestBody DeliveryInfoDto deliveryInfoDto, @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(orderService.createOrder(userDetails, deliveryInfoDto));
+        return ResponseEntity.status(201).body(orderService.createOrder(userDetails, deliveryInfoDto));
     }
 
     @DeleteMapping("/{id}")

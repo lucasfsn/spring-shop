@@ -20,7 +20,7 @@ public class ApiAuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<AuthResDto> signUp(@Valid @RequestBody UserSignupReqDto signupRequest) {
-        return ResponseEntity.ok(authService.signUp(signupRequest));
+        return ResponseEntity.status(201).body(authService.signUp(signupRequest));
     }
 
     @PostMapping("/login")
