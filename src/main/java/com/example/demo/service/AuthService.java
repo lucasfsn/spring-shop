@@ -1,8 +1,9 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.user.AuthResDto;
-import com.example.demo.dto.user.UserSignupReqDto;
 import com.example.demo.dto.user.UserLoginReqDto;
+import com.example.demo.dto.user.UserSignupReqDto;
+import com.example.demo.exception.AccessDeniedException;
 import com.example.demo.exception.AlreadyExistException;
 import com.example.demo.exception.InvalidDataException;
 import com.example.demo.exception.ResourceNotFoundException;
@@ -15,6 +16,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -42,8 +44,8 @@ public class AuthService {
         user.setRole(UserRole.CUSTOMER);
 
         Cart cart = new Cart();
-        cart.setUser(user);
         user.setCart(cart);
+        cart.setUser(user);
 
         User savedUser = userRepository.save(user);
         String token = jwtService.generateToken(savedUser);
@@ -65,5 +67,14 @@ public class AuthService {
         String token = jwtService.generateToken(user);
 
         return new AuthResDto(token, userMapper.toDto(user));
+    }
+
+    public void hasAdminAuthority(UserDetails userDetails) {
+        boolean isAdmin = userDetails.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isAdmin) {
+            throw new AccessDeniedException("You do not have permission to perform this action");
+        }
     }
 }

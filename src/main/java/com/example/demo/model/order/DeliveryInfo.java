@@ -20,7 +20,6 @@ public class DeliveryInfo {
     private UUID id;
 
     @Email(message = "Email should be valid")
-    @NotBlank(message = "Email should not be blank")
     private String email;
 
     @NotBlank(message = "Phone number should not be blank")

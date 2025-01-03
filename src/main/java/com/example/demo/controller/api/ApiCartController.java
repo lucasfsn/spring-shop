@@ -24,17 +24,17 @@ public class ApiCartController {
     }
 
     @PostMapping("/products/{productId}")
-    public ResponseEntity<CartDto> addToCart(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID productId) {
+    public ResponseEntity<CartDto> addToCart(@PathVariable UUID productId, @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(cartService.addToCart(userDetails, productId));
     }
 
     @DeleteMapping("/products/{productId}")
-    public ResponseEntity<CartDto> removeFromCart(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID productId) {
+    public ResponseEntity<CartDto> removeFromCart(@PathVariable UUID productId, @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(cartService.removeFromCart(userDetails, productId));
     }
 
     @PatchMapping("/products/{productId}")
-    public ResponseEntity<CartDto> updateCartElementQuantity(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID productId, @RequestBody @Valid CartQuantityReqDto cartQuantityReqDto) {
+    public ResponseEntity<CartDto> updateCartElementQuantity(@PathVariable UUID productId, @RequestBody @Valid CartQuantityReqDto cartQuantityReqDto, @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(cartService.updateQuantity(userDetails, productId, cartQuantityReqDto));
     }
 }

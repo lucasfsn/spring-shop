@@ -19,11 +19,9 @@ public class CartElement {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 
     @Positive(message = "Quantity must be positive")

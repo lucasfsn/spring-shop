@@ -9,6 +9,11 @@ import java.util.List;
 import java.util.UUID;
 
 public interface OrderRepository extends JpaRepository<Order, UUID> {
-    @Query("SELECT o FROM Order o WHERE o.user.username = :username")
+    @Query(value = "SELECT * FROM orders o WHERE o.user_id = (SELECT id FROM user u WHERE u.username = :username)", nativeQuery = true)
     List<Order> findOrdersByUsername(@Param("username") String username);
+
+    @Query("SELECT SUM(oe.quantity * p.price) as totalPrice " +
+            "FROM OrderElement oe JOIN oe.product p " +
+            "WHERE oe.order.id = :orderId")
+    Double findTotalPriceByOrderId(@Param("orderId") UUID orderId);
 }

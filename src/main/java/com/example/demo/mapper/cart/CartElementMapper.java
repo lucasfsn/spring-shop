@@ -3,6 +3,7 @@ package com.example.demo.mapper.cart;
 import com.example.demo.dto.cart.CartElementResDto;
 import com.example.demo.dto.category.CategoryResDto;
 import com.example.demo.mapper.category.CategoryMapper;
+import com.example.demo.model.cart.Cart;
 import com.example.demo.model.cart.CartElement;
 import com.example.demo.model.product.Product;
 import lombok.RequiredArgsConstructor;
@@ -31,10 +32,22 @@ public class CartElementMapper {
         dto.setQuantity(cartElement.getQuantity());
 
         List<CategoryResDto> categories = product.getCategories().stream()
-                        .map(categoryMapper::toDto)
-                        .collect(Collectors.toList());
+                .map(categoryMapper::toDto)
+                .collect(Collectors.toList());
         dto.setProductCategories(categories);
 
         return dto;
+    }
+
+    public CartElement toEntity(Cart cart, Product product, int quantity) {
+        if (cart == null || product == null) {
+            return null;
+        }
+
+        CartElement cartElement = new CartElement();
+        cartElement.setCart(cart);
+        cartElement.setProduct(product);
+        cartElement.setQuantity(quantity);
+        return cartElement;
     }
 }

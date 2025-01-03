@@ -1,24 +1,24 @@
 package com.example.demo.mapper.order;
 
 import com.example.demo.dto.order.OrderProductDto;
+import com.example.demo.model.cart.CartElement;
 import com.example.demo.model.order.Order;
 import com.example.demo.model.order.OrderElement;
-import com.example.demo.model.product.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class OrderElementMapper {
-    public OrderElement toEntity(Order order, Product product, int quantity) {
-        if (product == null || order == null) {
+    public OrderElement toEntity(CartElement cartElement, Order order) {
+        if (cartElement == null || order == null) {
             return null;
         }
 
         OrderElement orderElement = new OrderElement();
-        orderElement.setProduct(product);
+        orderElement.setProduct(cartElement.getProduct());
         orderElement.setOrder(order);
-        orderElement.setQuantity(quantity);
+        orderElement.setQuantity(cartElement.getQuantity());
         return orderElement;
     }
 

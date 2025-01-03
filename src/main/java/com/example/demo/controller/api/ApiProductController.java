@@ -20,28 +20,28 @@ public class ApiProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<ProductResDto>> getProducts(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<List<ProductResDto>> getProducts() {
         return ResponseEntity.ok(productService.getProducts());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResDto> getProduct(@PathVariable UUID id, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ProductResDto> getProduct(@PathVariable UUID id) {
         return ResponseEntity.ok(productService.getProduct(id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable UUID id, @AuthenticationPrincipal UserDetails userDetails) {
-        productService.deleteProduct(id);
+        productService.deleteProduct(userDetails, id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ProductResDto> updateProduct(@PathVariable UUID id, @RequestBody @Valid ProductReqDto productData, @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(productService.updateProduct(id, productData));
+        return ResponseEntity.ok(productService.updateProduct(userDetails, id, productData));
     }
 
     @PostMapping
     public ResponseEntity<ProductResDto> createProduct(@RequestBody @Valid ProductReqDto productData, @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(productService.createProduct(productData));
+        return ResponseEntity.ok(productService.createProduct(userDetails, productData));
     }
 }

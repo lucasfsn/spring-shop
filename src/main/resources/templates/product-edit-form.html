@@ -13,9 +13,9 @@
         </a>
         <div class="nav-buttons" th:if="${session.user != null}">
             <a th:href="@{'/products'}">Products</a>
-            <a th:unless="${session.user.isAdmin()}" th:href="@{'/orders'}">Orders</a>
-            <a th:unless="${session.user.isAdmin()}" th:href="@{'/cart'}">Cart</a>
-            <a th:if="${session.user.isAdmin()}" th:href="@{'/admin'}">Panel</a>
+            <a th:unless="${session.user.hasAdminRole()}" th:href="@{'/orders'}">Orders</a>
+            <a th:unless="${session.user.hasAdminRole()}" th:href="@{'/cart'}">Cart</a>
+            <a th:if="${session.user.hasAdminRole()}" th:href="@{'/admin'}">Panel</a>
             <a th:href="@{'/auth/logout'}">Logout</a>
         </div>
         <div class="nav-buttons" th:if="${session.user == null}">
@@ -27,27 +27,27 @@
         <h1 class="title">Edit Product</h1>
         <div class="form-row">
             <label for="name">Name</label>
-            <input type="text" id="name" th:field="*{name}" required />
+            <input type="text" id="name" th:field="*{name}" required/>
             <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error"></div>
         </div>
         <div class="form-row">
             <label for="description">Description</label>
-            <input type="text" id="description" th:field="*{description}" required />
+            <input type="text" id="description" th:field="*{description}" required/>
             <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="error"></div>
         </div>
         <div class="form-row">
             <label for="price">Price</label>
-            <input type="number" id="price" th:field="*{price}" step="0.01" required />
+            <input type="number" id="price" th:field="*{price}" step="0.01" required/>
             <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="error"></div>
         </div>
         <div class="form-row">
             <label for="available">Available</label>
-            <input type="checkbox" id="available" th:field="*{available}" />
+            <input type="checkbox" id="available" th:field="*{available}"/>
             <div th:if="${#fields.hasErrors('available')}" th:errors="*{available}" class="error"></div>
         </div>
         <div class="form-row">
             <label for="quantity">Quantity</label>
-            <input type="number" id="quantity" th:field="*{quantity}" min="0" required />
+            <input type="number" id="quantity" th:field="*{quantity}" min="0" required/>
             <div th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}" class="error"></div>
         </div>
         <div class="form-row">

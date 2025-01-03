@@ -19,18 +19,18 @@ public class ApiCategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<List<CategoryResDto>> getCategories(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<List<CategoryResDto>> getCategories() {
         return ResponseEntity.ok(categoryService.getCategories());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable UUID id, @AuthenticationPrincipal UserDetails userDetails) {
-        categoryService.deleteCategory(id);
+        categoryService.deleteCategory(userDetails, id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping
     public ResponseEntity<CategoryResDto> createCategory(@RequestBody CategoryReqDto categoryData, @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(categoryService.createCategory(categoryData));
+        return ResponseEntity.ok(categoryService.createCategory(userDetails, categoryData));
     }
 }

@@ -1,7 +1,7 @@
 package com.example.demo.controller.api;
 
 import com.example.demo.dto.user.ChangeUserRoleReqDto;
-import com.example.demo.dto.user.UpdateUserReqDto;
+import com.example.demo.dto.user.UpdateUserDto;
 import com.example.demo.dto.user.UserResDto;
 import com.example.demo.service.UserService;
 import jakarta.validation.Valid;
@@ -20,17 +20,17 @@ public class ApiUserController {
     private final UserService userService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResDto> getUser(@PathVariable UUID id, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<UserResDto> getUser(@PathVariable UUID id) {
         return ResponseEntity.ok(userService.getUser(id));
     }
 
     @PatchMapping("/{id}/role")
-    public ResponseEntity<UserResDto> changeUserRole(@PathVariable UUID id, @AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody ChangeUserRoleReqDto role) {
-        return ResponseEntity.ok(userService.changeUserRole(id, role));
+    public ResponseEntity<UserResDto> changeUserRole(@PathVariable UUID id, @Valid @RequestBody ChangeUserRoleReqDto role, @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(userService.changeUserRole(userDetails, id, role));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserResDto> updateUser(@PathVariable UUID id, @AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody UpdateUserReqDto updateReqDto) {
-        return ResponseEntity.ok(userService.updateUser(id, updateReqDto));
+    @PutMapping
+    public ResponseEntity<UserResDto> updateUser(@Valid @RequestBody UpdateUserDto updateReqDto, @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(userService.updateUser(userDetails, updateReqDto));
     }
 }

@@ -2,7 +2,11 @@ package com.example.demo.service;
 
 import com.example.demo.dto.cart.CartDto;
 import com.example.demo.dto.cart.CartQuantityReqDto;
-import com.example.demo.exception.*;
+import com.example.demo.exception.InvalidDataException;
+import com.example.demo.exception.NotAvailableException;
+import com.example.demo.exception.OutOfStockException;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.mapper.cart.CartElementMapper;
 import com.example.demo.mapper.cart.CartMapper;
 import com.example.demo.model.cart.Cart;
 import com.example.demo.model.cart.CartElement;
@@ -23,6 +27,7 @@ public class CartService {
     private final CartRepository cartRepository;
     private final CartMapper cartMapper;
     private final ProductService productService;
+    private final CartElementMapper cartElementMapper;
 
     public CartDto getUserCart(UserDetails userDetails) {
         Cart cart = getCartByUsername(userDetails.getUsername());
@@ -33,18 +38,10 @@ public class CartService {
     public CartDto addToCart(UserDetails userDetails, UUID productId) {
         Cart cart = getCartByUsername(userDetails.getUsername());
 
-        if (!cart.getUser().getUsername().equals(userDetails.getUsername())) {
-            throw new AccessDeniedException("You cannot add products to this cart");
-        }
-
         Product product = productService.getProductById(productId);
 
-        if (!product.isAvailable()) {
+        if (!product.isAvailable() || product.getQuantity() <= 0) {
             throw new NotAvailableException("Product is not available");
-        }
-
-        if (product.getQuantity() <= 0) {
-            throw new OutOfStockException("Not enough products in stock");
         }
 
         Optional<CartElement> foundCartElement = cart.getCartElements().stream()
@@ -55,10 +52,7 @@ public class CartService {
             CartElement cartElement = foundCartElement.get();
             cartElement.setQuantity(cartElement.getQuantity() + 1);
         } else {
-            CartElement cartElement = new CartElement();
-            cartElement.setCart(cart);
-            cartElement.setProduct(product);
-            cartElement.setQuantity(1);
+            CartElement cartElement = cartElementMapper.toEntity(cart, product, 1);
             cart.getCartElements().add(cartElement);
         }
 
@@ -70,9 +64,8 @@ public class CartService {
 
     public CartDto removeFromCart(UserDetails userDetails, UUID productId) {
         Cart cart = getCartByUsername(userDetails.getUsername());
-        UUID cartId = cart.getId();
 
-        CartElement cartElement = getCartElementByProductIdAndCartId(productId, cartId);
+        CartElement cartElement = getCartElementByProductIdAndCartId(productId, cart.getId());
 
         Product product = productService.getProductById(productId);
         product.setQuantity(product.getQuantity() + cartElement.getQuantity());
@@ -84,9 +77,8 @@ public class CartService {
 
     public CartDto updateQuantity(UserDetails userDetails, UUID productId, CartQuantityReqDto cartQuantityReqDto) {
         Cart cart = getCartByUsername(userDetails.getUsername());
-        UUID cartId = cart.getId();
 
-        CartElement cartElement = getCartElementByProductIdAndCartId(productId, cartId);
+        CartElement cartElement = getCartElementByProductIdAndCartId(productId, cart.getId());
 
         Product product = productService.getProductById(productId);
 

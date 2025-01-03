@@ -33,8 +33,7 @@ public class Product {
 
     @Positive(message = "Price must be positive")
     private double price;
-
-    @NotNull(message = "Available cannot be empty")
+    
     private boolean available;
 
     @PositiveOrZero(message = "Quantity must be positive or zero")
@@ -46,12 +45,6 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<OrderElement> orderElements;
 
-    // cascade, ponieważ może byc przypadek, że tworząc produkt tworzymy nową kategorię i chcemy ją zapisać do bazy
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "product_category",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
+    @ManyToMany
     private List<Category> categories;
 }

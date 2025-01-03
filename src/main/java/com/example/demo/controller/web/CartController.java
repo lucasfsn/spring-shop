@@ -29,13 +29,13 @@ public class CartController {
     }
 
     @GetMapping("/products/{productId}/remove")
-    public String removeFromCart(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID productId) {
+    public String removeFromCart(@PathVariable UUID productId, @AuthenticationPrincipal UserDetails userDetails) {
         cartService.removeFromCart(userDetails, productId);
         return "redirect:/cart";
     }
 
     @GetMapping("/products/{productId}/add")
-    public String addToCart(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID productId, Model model) {
+    public String addToCart(@PathVariable UUID productId, Model model, @AuthenticationPrincipal UserDetails userDetails) {
         try {
             cartService.addToCart(userDetails, productId);
             return "redirect:/cart";
@@ -47,7 +47,7 @@ public class CartController {
     }
 
     @PostMapping("/products/{productId}/quantity")
-    public String updateQuantity(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID productId, @Valid @ModelAttribute("quantity") CartQuantityReqDto cartQuantityReqDto, Model model) {
+    public String updateQuantity(@PathVariable UUID productId, @Valid @ModelAttribute("quantity") CartQuantityReqDto cartQuantityReqDto, Model model, @AuthenticationPrincipal UserDetails userDetails) {
         try {
             cartService.updateQuantity(userDetails, productId, cartQuantityReqDto);
             return "redirect:/cart";

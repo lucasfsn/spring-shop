@@ -18,7 +18,6 @@ public class ProductReqDto {
     private String description;
     @Positive(message = "Price must be positive")
     private double price;
-    @NotNull(message = "Available cannot be empty")
     private boolean available;
     @PositiveOrZero(message = "Quantity must be positive or zero")
     private int quantity;

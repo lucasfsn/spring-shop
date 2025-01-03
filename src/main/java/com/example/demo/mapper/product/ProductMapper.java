@@ -1,11 +1,11 @@
 package com.example.demo.mapper.product;
 
+import com.example.demo.dto.category.CategoryResDto;
 import com.example.demo.dto.product.ProductReqDto;
 import com.example.demo.dto.product.ProductResDto;
-import com.example.demo.dto.category.CategoryResDto;
 import com.example.demo.mapper.category.CategoryMapper;
-import com.example.demo.model.product.Product;
 import com.example.demo.model.category.Category;
+import com.example.demo.model.product.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +41,7 @@ public class ProductMapper {
         return productDto;
     }
 
-    public Product toEntity(ProductReqDto productDto) {
+    public Product toEntity(ProductReqDto productDto, List<Category> categories) {
         if (productDto == null) {
             return null;
         }
@@ -52,6 +52,22 @@ public class ProductMapper {
         product.setPrice(productDto.getPrice());
         product.setAvailable(productDto.isAvailable());
         product.setQuantity(productDto.getQuantity());
+        product.setCategories(categories);
+
+        return product;
+    }
+
+    public Product toExistingEntity(Product product, ProductReqDto productDto, List<Category> categories) {
+        if (productDto == null) {
+            return null;
+        }
+
+        product.setName(productDto.getName());
+        product.setDescription(productDto.getDescription());
+        product.setPrice(productDto.getPrice());
+        product.setAvailable(productDto.isAvailable());
+        product.setQuantity(productDto.getQuantity());
+        product.setCategories(categories);
 
         return product;
     }

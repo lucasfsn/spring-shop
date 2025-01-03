@@ -12,4 +12,5 @@ public class OrderResDto {
     private LocalDateTime createdAt;
     private DeliveryInfoDto deliveryInfo;
     private List<OrderProductDto> products;
+    private double totalPrice;
 }

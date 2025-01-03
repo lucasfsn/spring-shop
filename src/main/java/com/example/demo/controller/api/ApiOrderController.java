@@ -1,6 +1,7 @@
 package com.example.demo.controller.api;
 
 import com.example.demo.dto.order.DeliveryInfoDto;
+import com.example.demo.dto.order.OrderCreateDto;
 import com.example.demo.dto.order.OrderResDto;
 import com.example.demo.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -24,18 +25,17 @@ public class ApiOrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderResDto> getOrder(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID id) {
+    public ResponseEntity<OrderResDto> getOrder(@PathVariable UUID id, @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(orderService.getOrder(userDetails, id));
     }
 
     @PostMapping
-    public ResponseEntity<OrderResDto> createOrder(@AuthenticationPrincipal UserDetails userDetails, @RequestBody DeliveryInfoDto deliveryInfoDto) {
-        System.out.println(deliveryInfoDto);
+    public ResponseEntity<OrderCreateDto> createOrder(@RequestBody DeliveryInfoDto deliveryInfoDto, @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(orderService.createOrder(userDetails, deliveryInfoDto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOrder(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID id) {
+    public ResponseEntity<Void> deleteOrder(@PathVariable UUID id, @AuthenticationPrincipal UserDetails userDetails) {
         orderService.deleteOrder(userDetails, id);
         return ResponseEntity.noContent().build();
     }

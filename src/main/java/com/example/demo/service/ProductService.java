@@ -10,6 +10,7 @@ import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,10 +23,12 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final CategoryRepository categoryRepository;
+    private final AuthService authService;
 
-    public void deleteProduct(UUID id) {
+    public void deleteProduct(UserDetails userDetails, UUID id) {
+        authService.hasAdminAuthority(userDetails);
+
         Product product = getProductById(id);
-
         productRepository.deleteById(product.getId());
     }
 
@@ -43,40 +46,37 @@ public class ProductService {
                 .toList();
     }
 
-    public ProductResDto updateProduct(UUID id, ProductReqDto productData) {
-        Product product = getProductById(id);
+    public ProductResDto updateProduct(UserDetails userDetails, UUID id, ProductReqDto productData) {
+        authService.hasAdminAuthority(userDetails);
 
-        List<UUID> categoryIds = productData.getCategories();
-        List<Category> categories = categoryRepository.findAllById(categoryIds);
+        List<Category> categories = categoryRepository.findAllById(productData.getCategories());
 
-        if (categories.size() != categoryIds.size()) {
-            throw new ResourceNotFoundException("Some categories not found");
+        if (categories.size() != productData.getCategories().size()) {
+            throw new ResourceNotFoundException("All categories have not been found");
         }
-
-        product.setName(productData.getName());
-        product.setDescription(productData.getDescription());
-        product.setPrice(productData.getPrice());
-        product.setAvailable(productData.isAvailable());
-        product.setQuantity(productData.getQuantity());
-        product.setCategories(categories);
-
-        Product updatedProduct = productRepository.save(product);
-        return productMapper.toDto(updatedProduct);
+        
+        Product updatedProduct = productMapper.toExistingEntity(getProductById(id), productData, categories);
+        Product savedProduct = productRepository.save(updatedProduct);
+        return productMapper.toDto(savedProduct);
     }
 
-    public ProductResDto createProduct(ProductReqDto productData) {
-        Product product = productMapper.toEntity(productData);
-        List<UUID> categoryIds = productData.getCategories();
-        List<Category> categories = categoryRepository.findAllById(categoryIds);
+    public ProductResDto createProduct(UserDetails userDetails, ProductReqDto productData) {
+        authService.hasAdminAuthority(userDetails);
 
-        if (categories.size() != categoryIds.size()) {
-            throw new ResourceNotFoundException("Categories not found");
+        List<Category> categories = categoryRepository.findAllById(productData.getCategories());
+        if (categories.size() != productData.getCategories().size()) {
+            throw new ResourceNotFoundException("All categories have not been found");
         }
 
-        product.setCategories(categories);
-
+        Product product = productMapper.toEntity(productData, categories);
         Product createdProduct = productRepository.save(product);
         return productMapper.toDto(createdProduct);
+    }
+
+    public void updateProductQuantity(UUID productID, int quantity) {
+        Product product = getProductById(productID);
+        product.setQuantity(product.getQuantity() + quantity);
+        productRepository.save(product);
     }
 
     public Product getProductById(UUID id) {

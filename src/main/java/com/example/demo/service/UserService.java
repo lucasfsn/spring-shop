@@ -1,16 +1,16 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.user.ChangeUserRoleReqDto;
-import com.example.demo.dto.user.UpdateUserReqDto;
+import com.example.demo.dto.user.UpdateUserDto;
 import com.example.demo.dto.user.UserResDto;
 import com.example.demo.exception.AlreadyExistException;
+import com.example.demo.exception.InvalidDataException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.mapper.user.UserMapper;
 import com.example.demo.model.user.User;
-import com.example.demo.model.user.UserRole;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,35 +22,36 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final AuthService authService;
 
     public UserResDto getUser(UUID id) {
         User user = getUserById(id);
         return userMapper.toDto(user);
     }
 
-    public UserResDto changeUserRole(UUID id, ChangeUserRoleReqDto role) {
+    public UserResDto changeUserRole(UserDetails userDetails, UUID id, ChangeUserRoleReqDto role) {
+        authService.hasAdminAuthority(userDetails);
+
         User user = getUserById(id);
         user.setRole(role.getRole());
         User updatedUser = userRepository.save(user);
         return userMapper.toDto(updatedUser);
     }
 
-    public UserResDto updateUser(UUID id, UpdateUserReqDto updateUserData) {
-        User user = getUserById(id);
+    public UserResDto updateUser(UserDetails userDetails, UpdateUserDto updateUserData) {
+        User user = getUserByUsername(userDetails.getUsername());
 
-        if (userRepository.existsByEmailAndIdIsNot(updateUserData.getEmail(), id)) {
+        if (userRepository.existsByEmailAndIdIsNot(updateUserData.getEmail(), user.getId())) {
             throw new AlreadyExistException("Email already taken");
-        }
-
-        if (userRepository.existsByUsernameAndIdIsNot(updateUserData.getUsername(), id)) {
-            throw new AlreadyExistException("Username already taken");
         }
 
         user.setFirstName(updateUserData.getFirstName());
         user.setLastName(updateUserData.getLastName());
         user.setEmail(updateUserData.getEmail());
-        user.setUsername(updateUserData.getUsername());
-        if (updateUserData.getPassword() != null) {
+        if (updateUserData.getPassword() != null && !updateUserData.getPassword().isEmpty()) {
+            if (updateUserData.getPassword().length() < 8) {
+                throw new InvalidDataException("Password should be at least 8 characters long");
+            }
             user.setPassword(passwordEncoder.encode(updateUserData.getPassword()));
         }
 
@@ -60,5 +61,9 @@ public class UserService {
 
     private User getUserById(UUID id) {
         return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
+
+    private User getUserByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }

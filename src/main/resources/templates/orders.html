@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Shop</title>
     <link th:href="@{/styles/main.css}" rel="stylesheet">
-    <script type="text/javascript" th:src="@{/js/script.js}"></script>
+    <!--    <script type="text/javascript" th:src="@{/js/script.js}"></script>-->
 </head>
 <body>
 <div class="page">
@@ -14,9 +14,9 @@
         </a>
         <div class="nav-buttons" th:if="${session.user != null}">
             <a th:href="@{'/products'}">Products</a>
-            <a th:unless="${session.user.isAdmin()}" th:href="@{'/orders'}">Orders</a>
-            <a th:unless="${session.user.isAdmin()}" th:href="@{'/cart'}">Cart</a>
-            <a th:if="${session.user.isAdmin()}" th:href="@{'/admin'}">Panel</a>
+            <a th:unless="${session.user.hasAdminRole()}" th:href="@{'/orders'}">Orders</a>
+            <a th:unless="${session.user.hasAdminRole()}" th:href="@{'/cart'}">Cart</a>
+            <a th:if="${session.user.hasAdminRole()}" th:href="@{'/admin'}">Panel</a>
             <a th:href="@{'/auth/logout'}">Logout</a>
         </div>
         <div class="nav-buttons" th:if="${session.user == null}">
@@ -61,7 +61,7 @@
             </td>
             <td>
                 Total Price:
-                <span class="totalPrice"></span>
+                <span th:text="${order.totalPrice}"></span>
             </td>
             <td>
                 <p>

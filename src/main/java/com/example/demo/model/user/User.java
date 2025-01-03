@@ -3,7 +3,9 @@ package com.example.demo.model.user;
 import com.example.demo.model.cart.Cart;
 import com.example.demo.model.order.Order;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,26 +26,21 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NotBlank(message = "First name cannot be blank")
-    @Pattern(regexp = "^[A-Z][a-zA-Z]*$", message = "First name should start with an uppercase letter and contain only letters")
-    @Size(min = 2, max = 50, message = "First name should be between 2 and 50 characters long")
+    @Pattern(regexp = "^[a-zA-Z\\xC0-\\uFFFF]+([ \\-']?[a-zA-Z\\xC0-\\uFFFF]+){0,2}[.]?$", message = "First name cannot contain numbers and special characters")
+    @Size(min = 1, max = 50, message = "First name should be between 1 and 50 characters long")
     private String firstName;
 
-    @NotBlank(message = "Last name cannot be blank")
-    @Pattern(regexp = "^[A-Z][a-zA-Z]*$", message = "Last name should start with an uppercase letter and contain only letters")
-    @Size(min = 2, max = 50, message = "Last name should be between 2 and 50 characters long")
+    @Pattern(regexp = "^[a-zA-Z\\xC0-\\uFFFF]+([ \\-']?[a-zA-Z\\xC0-\\uFFFF]+){0,2}[.]?$", message = "Last name cannot contain numbers and special characters")
+    @Size(min = 1, max = 50, message = "Last name should be between 1 and 50 characters long")
     private String lastName;
 
-    @NotBlank(message = "Username cannot be blank")
-    @Pattern(regexp = "^[a-zA-Z0-9]*$", message = "Username should contain only letters and digits")
-    @Size(min = 5, max = 25, message = "Username should be between 5 and 25 characters long")
+    @Pattern(regexp = "^[a-zA-Z\\xC0-\\uFFFF]+([ \\-']?[a-zA-Z\\xC0-\\uFFFF]+){0,2}[.]?$", message = "Username cannot contain numbers and special characters")
+    @Size(min = 1, max = 25, message = "Username should be between 1 and 25 characters long")
     private String username;
 
-    @Email
-    @NotBlank(message = "Email cannot be blank")
+    @Email(message = "Email should be valid")
     private String email;
 
-    @NotBlank(message = "Password cannot be blank")
     @Size(min = 8, message = "Password should be between 8 and 50 characters long")
     private String password;
 
