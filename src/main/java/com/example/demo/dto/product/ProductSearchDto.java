@@ -14,7 +14,7 @@ public class ProductSearchDto {
     private Integer maxQuantity;
     private Boolean available;
     private String sortBy = "name";
-    private String sortOrder = Sort.Direction.ASC.name();
+    private Sort.Direction sortOrder = Sort.Direction.ASC;
     private Integer page = 0;
     private Integer size = 10;
 }

@@ -44,11 +44,10 @@ public class ProductService {
     }
 
     public Page<ProductResDto> getProducts(ProductSearchDto searchDto) {
-        Sort.Direction sortDirection = Sort.Direction.fromString(searchDto.getSortOrder().toUpperCase());
         Pageable pageable = PageRequest.of(
                 searchDto.getPage(),
                 searchDto.getSize(),
-                Sort.by(sortDirection, searchDto.getSortBy())
+                Sort.by(searchDto.getSortOrder(), searchDto.getSortBy())
         );
         Page<Product> products = productRepository.searchProducts(
                 searchDto.getName(),
