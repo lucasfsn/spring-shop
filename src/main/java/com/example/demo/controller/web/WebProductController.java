@@ -6,8 +6,6 @@ import com.example.demo.service.CategoryService;
 import com.example.demo.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.Data;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,8 +27,8 @@ public class WebProductController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable UUID id, @AuthenticationPrincipal UserDetails userDetails) {
-        productService.deleteProduct(userDetails, id);
+    public String deleteProduct(@PathVariable UUID id) {
+        productService.deleteProduct(id);
         return "redirect:/products";
     }
 
@@ -42,7 +40,7 @@ public class WebProductController {
     }
 
     @PostMapping("/add")
-    public String addProductForm(@Valid @ModelAttribute("productAddForm") ProductReqDto productDto, BindingResult bindingResult, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String addProductForm(@Valid @ModelAttribute("productAddForm") ProductReqDto productDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("productAddForm", productDto);
             model.addAttribute("categories", categoryService.getCategories());
@@ -50,7 +48,7 @@ public class WebProductController {
         }
 
         try {
-            productService.createProduct(userDetails, productDto);
+            productService.createProduct(productDto);
             return "redirect:/products";
         } catch (Exception e) {
             model.addAttribute("productAddForm", productDto);
@@ -68,7 +66,7 @@ public class WebProductController {
     }
 
     @PostMapping("/edit/{id}")
-    public String editProductForm(@PathVariable UUID id, @Valid @ModelAttribute("productEditForm") ProductReqDto productDto, BindingResult bindingResult, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String editProductForm(@PathVariable UUID id, @Valid @ModelAttribute("productEditForm") ProductReqDto productDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("productAddForm", productDto);
             model.addAttribute("allCategories", categoryService.getCategories());
@@ -77,7 +75,7 @@ public class WebProductController {
         }
 
         try {
-            productService.updateProduct(userDetails, id, productDto);
+            productService.updateProduct(id, productDto);
             return "redirect:/products";
         } catch (Exception e) {
             model.addAttribute("productAddForm", productDto);

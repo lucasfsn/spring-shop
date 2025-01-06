@@ -10,6 +10,7 @@ import lombok.Data;
 public class DeliveryInfoDto {
     @Email(message = "Email should be valid")
     private String email;
+    @NotBlank(message = "Phone number should not be blank")
     @Pattern(regexp = "^[0-9]{9}$", message = "Phone number should have 9 digits")
     private String phoneNumber;
     @NotBlank(message = "Street should not be blank")
@@ -23,6 +24,7 @@ public class DeliveryInfoDto {
     @NotBlank(message = "City should not be blank")
     @Size(min = 3, message = "City should have at least 3 characters")
     private String city;
+    @NotBlank(message = "Postal code should not be blank")
     @Pattern(regexp = "^[0-9]{2}-[0-9]{3}$", message = "Postal code should be in the format xx-xxx")
     private String postalCode;
     @NotBlank(message = "Country should not be blank")

@@ -21,16 +21,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
-    private final AuthService authService;
 
     public UserResDto getUser(UUID id) {
         User user = getUserById(id);
         return userMapper.toDto(user);
     }
 
-    public UserResDto changeUserRole(UserDetails userDetails, UUID id, ChangeUserRoleReqDto role) {
-        authService.hasAdminAuthority(userDetails);
-
+    public UserResDto changeUserRole(UUID id, ChangeUserRoleReqDto role) {
         User user = getUserById(id);
         user.setRole(role.getRole());
         User updatedUser = userRepository.save(user);

@@ -15,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,11 +27,8 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final CategoryRepository categoryRepository;
-    private final AuthService authService;
 
-    public void deleteProduct(UserDetails userDetails, UUID id) {
-        authService.hasAdminAuthority(userDetails);
-
+    public void deleteProduct(UUID id) {
         Product product = getProductById(id);
         productRepository.deleteById(product.getId());
     }
@@ -63,9 +59,7 @@ public class ProductService {
         return products.map(productMapper::toDto);
     }
 
-    public ProductResDto updateProduct(UserDetails userDetails, UUID id, ProductReqDto productData) {
-        authService.hasAdminAuthority(userDetails);
-
+    public ProductResDto updateProduct(UUID id, ProductReqDto productData) {
         List<Category> categories = categoryRepository.findAllById(productData.getCategories());
 
         if (categories.size() != productData.getCategories().size()) {
@@ -77,9 +71,7 @@ public class ProductService {
         return productMapper.toDto(savedProduct);
     }
 
-    public ProductResDto createProduct(UserDetails userDetails, ProductReqDto productData) {
-        authService.hasAdminAuthority(userDetails);
-
+    public ProductResDto createProduct(ProductReqDto productData) {
         List<Category> categories = categoryRepository.findAllById(productData.getCategories());
         if (categories.size() != productData.getCategories().size()) {
             throw new ResourceNotFoundException("All categories have not been found");

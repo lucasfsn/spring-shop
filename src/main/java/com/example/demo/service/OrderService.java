@@ -25,14 +25,11 @@ import java.util.*;
 public class OrderService {
     private final OrderMapper orderMapper;
     private final OrderRepository orderRepository;
-    private final AuthService authService;
     private final OrderElementMapper orderElementMapper;
     private final CartService cartService;
     private final ProductService productService;
 
-    public List<OrderAdminResDto> getOrdersFromAllUsers(UserDetails userDetails) {
-        authService.hasAdminAuthority(userDetails);
-
+    public List<OrderAdminResDto> getOrdersFromAllUsers() {
         List<Object[]> results = orderRepository.findAllUsersOrders();
         Map<UUID, List<Order>> userOrdersMap = new HashMap<>();
 
@@ -107,9 +104,7 @@ public class OrderService {
         orderRepository.deleteById(order.getId());
     }
 
-    public OrderResDto updateOrderStatus(UserDetails userDetails, UUID id, ChangeOrderStatusDto orderStatusDto) {
-        authService.hasAdminAuthority(userDetails);
-
+    public OrderResDto updateOrderStatus(UUID id, ChangeOrderStatusDto orderStatusDto) {
         Order order = getOrderByID(id);
         order.setStatus(orderStatusDto.getStatus());
         Order updatedOrder = orderRepository.save(order);

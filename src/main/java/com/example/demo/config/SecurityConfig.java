@@ -71,11 +71,9 @@ public class SecurityConfig {
                         .accessDeniedHandler((request, response, accessDeniedException) -> response.sendRedirect("/"))
                         .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/")))
                 .formLogin(form -> form
-                        .loginPage("/login")
-                        .permitAll())
+                        .loginPage("/login").permitAll())
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .permitAll())
+                        .logoutUrl("/logout").permitAll())
                 .build();
     }
 

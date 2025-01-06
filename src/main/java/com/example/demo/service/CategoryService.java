@@ -9,7 +9,6 @@ import com.example.demo.model.category.Category;
 import com.example.demo.repository.CategoryRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,19 +20,14 @@ import java.util.UUID;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
-    private final AuthService authService;
 
-    public void deleteCategory(UserDetails userDetails, UUID id) {
-        authService.hasAdminAuthority(userDetails);
-
+    public void deleteCategory(UUID id) {
         Category category = getCategoryById(id);
 
         categoryRepository.deleteById(category.getId());
     }
 
-    public CategoryResDto createCategory(UserDetails userDetails, CategoryReqDto categoryData) {
-        authService.hasAdminAuthority(userDetails);
-
+    public CategoryResDto createCategory(CategoryReqDto categoryData) {
         if (categoryRepository.existsByName(categoryData.getName())) {
             throw new AlreadyExistException("Category with this name already exists");
         }

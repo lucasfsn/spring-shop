@@ -6,8 +6,6 @@ import com.example.demo.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,13 +23,13 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable UUID id, @AuthenticationPrincipal UserDetails userDetails) {
-        categoryService.deleteCategory(userDetails, id);
+    public ResponseEntity<Void> deleteCategory(@PathVariable UUID id) {
+        categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping
-    public ResponseEntity<CategoryResDto> createCategory(@Valid @RequestBody CategoryReqDto categoryData, @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(categoryService.createCategory(userDetails, categoryData));
+    public ResponseEntity<CategoryResDto> createCategory(@Valid @RequestBody CategoryReqDto categoryData) {
+        return ResponseEntity.ok(categoryService.createCategory(categoryData));
     }
 }

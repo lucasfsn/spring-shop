@@ -8,8 +8,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -31,18 +29,18 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable UUID id, @AuthenticationPrincipal UserDetails userDetails) {
-        productService.deleteProduct(userDetails, id);
+    public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
+        productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResDto> updateProduct(@PathVariable UUID id, @Valid @RequestBody ProductReqDto productData, @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(productService.updateProduct(userDetails, id, productData));
+    public ResponseEntity<ProductResDto> updateProduct(@PathVariable UUID id, @Valid @RequestBody ProductReqDto productData) {
+        return ResponseEntity.ok(productService.updateProduct(id, productData));
     }
 
     @PostMapping
-    public ResponseEntity<ProductResDto> createProduct(@Valid @RequestBody ProductReqDto productData, @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.status(201).body(productService.createProduct(userDetails, productData));
+    public ResponseEntity<ProductResDto> createProduct(@Valid @RequestBody ProductReqDto productData) {
+        return ResponseEntity.status(201).body(productService.createProduct(productData));
     }
 }

@@ -24,8 +24,8 @@ public class OrderController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<OrderAdminResDto>> getOrdersFromAllUsers(@AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(orderService.getOrdersFromAllUsers(userDetails));
+    public ResponseEntity<List<OrderAdminResDto>> getOrdersFromAllUsers() {
+        return ResponseEntity.ok(orderService.getOrdersFromAllUsers());
     }
 
     @GetMapping("/{id}")
@@ -45,7 +45,7 @@ public class OrderController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<OrderResDto> updateOrderStatus(@PathVariable UUID id, @Valid @RequestBody ChangeOrderStatusDto orderStatusDto, @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(orderService.updateOrderStatus(userDetails, id, orderStatusDto));
+    public ResponseEntity<OrderResDto> updateOrderStatus(@PathVariable UUID id, @Valid @RequestBody ChangeOrderStatusDto orderStatusDto) {
+        return ResponseEntity.ok(orderService.updateOrderStatus(id, orderStatusDto));
     }
 }

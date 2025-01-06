@@ -10,8 +10,6 @@ import com.example.demo.service.OrderService;
 import com.example.demo.service.UserService;
 import jakarta.validation.Valid;
 import lombok.Data;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,7 +36,7 @@ public class WebAdminController {
     }
 
     @PostMapping("/change-role")
-    public String changeUserRole(@RequestParam UUID userId, @Valid @ModelAttribute("userRoleChangeForm") ChangeUserRoleReqDto changeUserRoleReqDto, BindingResult bindingResult, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String changeUserRole(@RequestParam UUID userId, @Valid @ModelAttribute("userRoleChangeForm") ChangeUserRoleReqDto changeUserRoleReqDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("userRoleChangeForm", changeUserRoleReqDto);
             model.addAttribute("categoryAddForm", new CategoryReqDto());
@@ -49,7 +47,7 @@ public class WebAdminController {
         }
 
         try {
-            userService.changeUserRole(userDetails, userId, changeUserRoleReqDto);
+            userService.changeUserRole(userId, changeUserRoleReqDto);
             return "redirect:/admin";
         } catch (Exception e) {
             model.addAttribute("userRoleChangeForm", changeUserRoleReqDto);
@@ -63,7 +61,7 @@ public class WebAdminController {
     }
 
     @PostMapping("/add-category")
-    public String addCategory(@Valid @ModelAttribute("categoryAddForm") CategoryReqDto categoryReqDto, BindingResult bindingResult, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String addCategory(@Valid @ModelAttribute("categoryAddForm") CategoryReqDto categoryReqDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("userRoleChangeForm", new ChangeUserRoleReqDto());
             model.addAttribute("categoryAddForm", categoryReqDto);
@@ -74,7 +72,7 @@ public class WebAdminController {
         }
 
         try {
-            categoryService.createCategory(userDetails, categoryReqDto);
+            categoryService.createCategory(categoryReqDto);
             return "redirect:/admin";
         } catch (Exception e) {
             model.addAttribute("userRoleChangeForm", new ChangeUserRoleReqDto());
@@ -88,7 +86,7 @@ public class WebAdminController {
     }
 
     @PostMapping("/order-status")
-    public String changeOrderStatus(@RequestParam UUID orderId, @Valid @ModelAttribute("orderStatusForm") ChangeOrderStatusDto changeOrderStatusDto, BindingResult bindingResult, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String changeOrderStatus(@RequestParam UUID orderId, @Valid @ModelAttribute("orderStatusForm") ChangeOrderStatusDto changeOrderStatusDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("userRoleChangeForm", new ChangeUserRoleReqDto());
             model.addAttribute("categoryAddForm", new CategoryReqDto());
@@ -99,7 +97,7 @@ public class WebAdminController {
         }
 
         try {
-            orderService.updateOrderStatus(userDetails, orderId, changeOrderStatusDto);
+            orderService.updateOrderStatus(orderId, changeOrderStatusDto);
             return "redirect:/admin";
         } catch (Exception e) {
             model.addAttribute("userRoleChangeForm", new ChangeUserRoleReqDto());

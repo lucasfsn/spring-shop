@@ -25,8 +25,8 @@ public class UserController {
     }
 
     @PatchMapping("/{id}/role")
-    public ResponseEntity<UserResDto> changeUserRole(@PathVariable UUID id, @Valid @RequestBody ChangeUserRoleReqDto role, @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(userService.changeUserRole(userDetails, id, role));
+    public ResponseEntity<UserResDto> changeUserRole(@PathVariable UUID id, @Valid @RequestBody ChangeUserRoleReqDto role) {
+        return ResponseEntity.ok(userService.changeUserRole(id, role));
     }
 
     @PutMapping
