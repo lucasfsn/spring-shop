@@ -1,9 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.order.ChangeOrderStatusDto;
-import com.example.demo.dto.order.DeliveryInfoDto;
-import com.example.demo.dto.order.OrderCreateDto;
-import com.example.demo.dto.order.OrderResDto;
+import com.example.demo.dto.order.*;
 import com.example.demo.exception.AccessDeniedException;
 import com.example.demo.exception.InvalidDataException;
 import com.example.demo.exception.ResourceNotFoundException;
@@ -20,8 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +29,29 @@ public class OrderService {
     private final OrderElementMapper orderElementMapper;
     private final CartService cartService;
     private final ProductService productService;
+
+    public List<OrderAdminResDto> getOrdersFromAllUsers(UserDetails userDetails) {
+        authService.hasAdminAuthority(userDetails);
+
+        List<Object[]> results = orderRepository.findAllUsersOrders();
+        Map<UUID, List<Order>> userOrdersMap = new HashMap<>();
+
+        for (Object[] result : results) {
+            UUID userId = (UUID) result[0];
+            Order order = (Order) result[1];
+            userOrdersMap.computeIfAbsent(userId, k -> new ArrayList<>()).add(order);
+        }
+
+        return userOrdersMap.entrySet().stream()
+                .map(entry -> {
+                    UUID userId = entry.getKey();
+                    List<OrderResDto> ordersDto = entry.getValue().stream()
+                            .map(this::orderResDtoWithTotalPrice)
+                            .toList();
+                    return new OrderAdminResDto(userId, ordersDto);
+                })
+                .toList();
+    }
 
     public List<OrderResDto> getOrders(UserDetails userDetails) {
         List<Order> orders = getOrdersByUsername(userDetails.getUsername());

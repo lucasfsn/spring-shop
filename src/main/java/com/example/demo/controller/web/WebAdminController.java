@@ -1,9 +1,12 @@
 package com.example.demo.controller.web;
 
 import com.example.demo.dto.category.CategoryReqDto;
+import com.example.demo.dto.order.ChangeOrderStatusDto;
 import com.example.demo.dto.user.ChangeUserRoleReqDto;
+import com.example.demo.model.order.OrderStatus;
 import com.example.demo.model.user.UserRole;
 import com.example.demo.service.CategoryService;
+import com.example.demo.service.OrderService;
 import com.example.demo.service.UserService;
 import jakarta.validation.Valid;
 import lombok.Data;
@@ -22,12 +25,15 @@ import java.util.UUID;
 public class WebAdminController {
     private final UserService userService;
     private final CategoryService categoryService;
+    private final OrderService orderService;
 
     @GetMapping
     public String admin(Model model) {
         model.addAttribute("userRoleChangeForm", new ChangeUserRoleReqDto());
         model.addAttribute("categoryAddForm", new CategoryReqDto());
+        model.addAttribute("orderStatusForm", new ChangeOrderStatusDto());
         model.addAttribute("roles", UserRole.values());
+        model.addAttribute("statuses", OrderStatus.values());
         return "admin";
     }
 
@@ -36,7 +42,9 @@ public class WebAdminController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("userRoleChangeForm", changeUserRoleReqDto);
             model.addAttribute("categoryAddForm", new CategoryReqDto());
+            model.addAttribute("orderStatusForm", new ChangeOrderStatusDto());
             model.addAttribute("roles", UserRole.values());
+            model.addAttribute("statuses", OrderStatus.values());
             return "admin";
         }
 
@@ -46,7 +54,9 @@ public class WebAdminController {
         } catch (Exception e) {
             model.addAttribute("userRoleChangeForm", changeUserRoleReqDto);
             model.addAttribute("categoryAddForm", new CategoryReqDto());
+            model.addAttribute("orderStatusForm", new ChangeOrderStatusDto());
             model.addAttribute("roles", UserRole.values());
+            model.addAttribute("statuses", OrderStatus.values());
             model.addAttribute("roleError", e.getMessage());
             return "admin";
         }
@@ -57,7 +67,9 @@ public class WebAdminController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("userRoleChangeForm", new ChangeUserRoleReqDto());
             model.addAttribute("categoryAddForm", categoryReqDto);
+            model.addAttribute("orderStatusForm", new ChangeOrderStatusDto());
             model.addAttribute("roles", UserRole.values());
+            model.addAttribute("statuses", OrderStatus.values());
             return "admin";
         }
 
@@ -67,8 +79,35 @@ public class WebAdminController {
         } catch (Exception e) {
             model.addAttribute("userRoleChangeForm", new ChangeUserRoleReqDto());
             model.addAttribute("categoryAddForm", categoryReqDto);
+            model.addAttribute("orderStatusForm", new ChangeOrderStatusDto());
             model.addAttribute("roles", UserRole.values());
+            model.addAttribute("statuses", OrderStatus.values());
             model.addAttribute("categoryError", e.getMessage());
+            return "admin";
+        }
+    }
+
+    @PostMapping("/order-status")
+    public String changeOrderStatus(@RequestParam UUID orderId, @Valid @ModelAttribute("orderStatusForm") ChangeOrderStatusDto changeOrderStatusDto, BindingResult bindingResult, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("userRoleChangeForm", new ChangeUserRoleReqDto());
+            model.addAttribute("categoryAddForm", new CategoryReqDto());
+            model.addAttribute("orderStatusForm", changeOrderStatusDto);
+            model.addAttribute("roles", UserRole.values());
+            model.addAttribute("statuses", OrderStatus.values());
+            return "admin";
+        }
+
+        try {
+            orderService.updateOrderStatus(userDetails, orderId, changeOrderStatusDto);
+            return "redirect:/admin";
+        } catch (Exception e) {
+            model.addAttribute("userRoleChangeForm", new ChangeUserRoleReqDto());
+            model.addAttribute("categoryAddForm", new CategoryReqDto());
+            model.addAttribute("orderStatusForm", changeOrderStatusDto);
+            model.addAttribute("roles", UserRole.values());
+            model.addAttribute("statuses", OrderStatus.values());
+            model.addAttribute("orderStatusError", e.getMessage());
             return "admin";
         }
     }

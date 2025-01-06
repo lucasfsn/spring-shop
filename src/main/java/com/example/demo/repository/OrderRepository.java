@@ -16,4 +16,7 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
             "FROM OrderElement oe JOIN oe.product p " +
             "WHERE oe.order.id = :orderId")
     Double findTotalPriceByOrderId(@Param("orderId") UUID orderId);
+
+    @Query("SELECT o.user.id, o FROM Order o")
+    List<Object[]> findAllUsersOrders();
 }

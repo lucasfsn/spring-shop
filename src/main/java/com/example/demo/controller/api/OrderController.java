@@ -1,9 +1,6 @@
 package com.example.demo.controller.api;
 
-import com.example.demo.dto.order.ChangeOrderStatusDto;
-import com.example.demo.dto.order.DeliveryInfoDto;
-import com.example.demo.dto.order.OrderCreateDto;
-import com.example.demo.dto.order.OrderResDto;
+import com.example.demo.dto.order.*;
 import com.example.demo.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +21,11 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<List<OrderResDto>> getCategories(@AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(orderService.getOrders(userDetails));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<OrderAdminResDto>> getOrdersFromAllUsers(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(orderService.getOrdersFromAllUsers(userDetails));
     }
 
     @GetMapping("/{id}")

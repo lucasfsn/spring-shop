@@ -59,6 +59,26 @@
                 <button class="btn" type="submit">Create Category</button>
             </form>
         </div>
+        <div class="admin-form">
+            <h2 class="text-center">Change Order Status</h2>
+            <form th:action="@{/admin/order-status}" th:object="${orderStatusForm}" method="post">
+                <div class="form-row">
+                    <label for="orderId">Order ID</label>
+                    <input type="text" id="orderId" name="orderId" required/>
+                    <div th:if="${orderStatusError}" class="error-service">
+                        <p th:text="${orderStatusError}"></p>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label for="status">Status</label>
+                    <select id="status" th:field="*{status}">
+                        <option th:each="status : ${statuses}" th:value="${status}" th:text="${status}"></option>
+                    </select>
+                    <div th:if="${#fields.hasErrors('status')}" th:errors="*{status}" class="error"></div>
+                </div>
+                <button class="btn" type="submit">Change Status</button>
+            </form>
+        </div>
     </div>
 </div>
 </body>
