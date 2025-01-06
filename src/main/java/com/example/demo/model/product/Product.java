@@ -21,9 +21,9 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NotBlank(message = "Name cannot be empty")
-    @Pattern(regexp = "^[A-Z][a-zA-Z\\s]*$", message = "Name should start with an uppercase letter and contain only letters and spaces")
-    @Size(min = 2, max = 25, message = "Name should be between 2 and 25 characters long")
+    @NotBlank(message = "Product name cannot be empty")
+    @Pattern(regexp = "^[A-Z][a-zA-Z\\s]*$", message = "Product name should start with an uppercase letter and contain only letters and spaces")
+    @Size(min = 2, max = 25, message = "Product name should be between 2 and 25 characters long")
     private String name;
 
     @NotBlank(message = "Description cannot be empty")
@@ -33,7 +33,7 @@ public class Product {
 
     @Positive(message = "Price must be positive")
     private double price;
-    
+
     private boolean available;
 
     @PositiveOrZero(message = "Quantity must be positive or zero")

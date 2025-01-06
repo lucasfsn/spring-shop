@@ -17,8 +17,8 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "(:minPrice IS NULL OR p.price >= :minPrice) AND " +
             "(:maxPrice IS NULL OR p.price <= :maxPrice) AND " +
             "(:minQuantity IS NULL OR p.quantity >= :minQuantity) AND " +
-            "(:maxQuantity IS NULL OR p.quantity <= :maxQuantity) " +
-            "AND (:available IS NULL OR p.available = :available) " +
+            "(:maxQuantity IS NULL OR p.quantity <= :maxQuantity) AND " +
+            "(:available IS NULL OR p.available = :available) " +
             "GROUP BY p.id")
     Page<Product> searchProducts(@Param("name") String name,
                                  @Param("description") String description,

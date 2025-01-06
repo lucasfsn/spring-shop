@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class ApiAuthController {
+public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")

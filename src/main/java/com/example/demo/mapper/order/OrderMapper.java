@@ -3,6 +3,7 @@ package com.example.demo.mapper.order;
 import com.example.demo.dto.order.DeliveryInfoDto;
 import com.example.demo.dto.order.OrderResDto;
 import com.example.demo.model.order.Order;
+import com.example.demo.model.order.OrderStatus;
 import com.example.demo.model.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,7 @@ public class OrderMapper {
                 .map(orderElementMapper::toDto)
                 .toList());
         dto.setCreatedAt(order.getCreatedAt());
+        dto.setStatus(order.getStatus());
         return dto;
     }
 
@@ -39,6 +41,7 @@ public class OrderMapper {
         order.setUser(user);
         order.setDeliveryInfo(deliveryInfoMapper.toEntity(deliveryInfoDto));
         order.setCreatedAt(LocalDateTime.now());
+        order.setStatus(OrderStatus.PENDING);
         return order;
     }
 }

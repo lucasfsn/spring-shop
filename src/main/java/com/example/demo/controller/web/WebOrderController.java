@@ -4,11 +4,13 @@ import com.example.demo.dto.order.DeliveryInfoDto;
 import com.example.demo.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.Data;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -16,12 +18,18 @@ import java.util.UUID;
 @Data
 @Controller
 @RequestMapping("/orders")
-public class OrderController {
+public class WebOrderController {
     private final OrderService orderService;
+
+    @InitBinder("deliveryInfoForm")
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+    }
 
     @GetMapping
     public String getOrders(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         model.addAttribute("orders", orderService.getOrders(userDetails));
+        model.addAttribute("error", null);
         return "orders";
     }
 
@@ -32,9 +40,9 @@ public class OrderController {
     }
 
     @PostMapping("/create")
-    public String createOrderForm(@Valid @ModelAttribute("deliveryInfoForm") DeliveryInfoDto deliveryInfoDto, Model model, @AuthenticationPrincipal UserDetails userDetails, BindingResult bindingResult) {
+    public String createOrderForm(@Valid @ModelAttribute("deliveryInfoForm") DeliveryInfoDto deliveryInfoDto, BindingResult bindingResult, Model model, @AuthenticationPrincipal UserDetails userDetails) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("deliveryInfoForm", new DeliveryInfoDto());
+            model.addAttribute("deliveryInfoForm", deliveryInfoDto);
             return "delivery-form";
         }
 
@@ -42,14 +50,21 @@ public class OrderController {
             orderService.createOrder(userDetails, deliveryInfoDto);
             return "redirect:/orders";
         } catch (Exception e) {
-            model.addAttribute("deliveryInfoForm", new DeliveryInfoDto());
+            model.addAttribute("deliveryInfoForm", deliveryInfoDto);
+            model.addAttribute("error", e.getMessage());
             return "delivery-form";
         }
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteOrder(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID id) {
-        orderService.deleteOrder(userDetails, id);
-        return "redirect:/orders";
+    public String deleteOrder(@PathVariable UUID id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            orderService.deleteOrder(userDetails, id);
+            return "redirect:/orders";
+        } catch (Exception e) {
+            model.addAttribute("orders", orderService.getOrders(userDetails));
+            model.addAttribute("error", e.getMessage());
+            return "orders";
+        }
     }
 }

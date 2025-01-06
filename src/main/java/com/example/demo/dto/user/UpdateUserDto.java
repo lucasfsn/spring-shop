@@ -16,5 +16,6 @@ public class UpdateUserDto {
     private String lastName;
     @Email(message = "Email should be valid")
     private String email;
+    @Pattern(regexp = "\\S{8,}$", message = "Password should be at least 8 characters long and cannot contain any whitespace characters")
     private String password;
 }

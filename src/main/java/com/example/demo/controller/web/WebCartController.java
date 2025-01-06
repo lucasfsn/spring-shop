@@ -19,7 +19,7 @@ import java.util.UUID;
 @Data
 @Controller
 @RequestMapping("/cart")
-public class CartController {
+public class WebCartController {
     private final CartService cartService;
     private final ProductService productService;
 

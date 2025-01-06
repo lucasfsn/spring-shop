@@ -58,12 +58,12 @@
         <div class="form-row">
             <label for="postalCode">Postal Code</label>
             <input type="text" id="postalCode" th:field="*{postalCode}" required/>
-            <div th:if="${#fields.hasErrors('city')}" th:errors="*{postalCode}" class="error"></div>
+            <div th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}" class="error"></div>
         </div>
         <div class="form-row">
             <label for="country">Country</label>
             <input type="text" id="country" th:field="*{country}" required/>
-            <div th:if="${#fields.hasErrors('city')}" th:errors="*{country}" class="error"></div>
+            <div th:if="${#fields.hasErrors('country')}" th:errors="*{country}" class="error"></div>
         </div>
         <button class="btn" type="submit">Create</button>
     </form>

@@ -15,7 +15,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/cart")
 @RequiredArgsConstructor
-public class ApiCartController {
+public class CartController {
     private final CartService cartService;
 
     @GetMapping
@@ -34,7 +34,7 @@ public class ApiCartController {
     }
 
     @PatchMapping("/products/{productId}")
-    public ResponseEntity<CartDto> updateCartElementQuantity(@PathVariable UUID productId, @RequestBody @Valid CartQuantityReqDto cartQuantityReqDto, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<CartDto> updateCartElementQuantity(@PathVariable UUID productId, @Valid @RequestBody CartQuantityReqDto cartQuantityReqDto, @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(cartService.updateQuantity(userDetails, productId, cartQuantityReqDto));
     }
 }

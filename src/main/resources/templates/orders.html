@@ -30,6 +30,7 @@
             <th>Id</th>
             <th>Created at</th>
             <th>Products</th>
+            <th>Status</th>
             <th>Total price</th>
             <th>Delivery info</th>
             <th>Actions</th>
@@ -59,7 +60,8 @@
                     </p>
                 </div>
             </td>
-            <td>
+            <td th:text="${order.status}"></td>
+            <td th:text="${order.totalPrice}">
                 Total Price:
                 <span th:text="${order.totalPrice}"></span>
             </td>
@@ -90,6 +92,9 @@
         </tr>
         </tbody>
     </table>
+    <div th:if="${error}" class="error-service">
+        <p th:text="${error}"></p>
+    </div>
 </div>
 </body>
 </html>

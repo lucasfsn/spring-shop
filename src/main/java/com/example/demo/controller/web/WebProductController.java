@@ -18,7 +18,7 @@ import java.util.UUID;
 @Data
 @Controller
 @RequestMapping("/products")
-public class ProductController {
+public class WebProductController {
     private final ProductService productService;
     private final CategoryService categoryService;
 

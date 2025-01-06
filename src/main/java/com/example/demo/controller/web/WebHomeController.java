@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Data
 @Controller
-public class HomeController {
+public class WebHomeController {
     private final ProductService productService;
 
     @GetMapping("/")

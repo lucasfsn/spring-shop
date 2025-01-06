@@ -13,6 +13,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "cart_element")
 public class CartElement {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

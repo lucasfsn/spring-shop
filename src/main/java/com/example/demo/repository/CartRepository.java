@@ -13,6 +13,6 @@ public interface CartRepository extends JpaRepository<Cart, UUID> {
     @Query("SELECT c FROM Cart c JOIN c.user u WHERE u.username = :username")
     Optional<Cart> findByUsername(@Param("username") String username);
 
-    @Query("SELECT ce FROM CartElement ce WHERE ce.product.id = :productId AND ce.cart.id = :cartId")
+    @Query(value = "SELECT * FROM cart_element el WHERE el.product_id = :productId AND el.cart_id = :cartId", nativeQuery = true)
     Optional<CartElement> findCartElementByProductIdAndCartId(@Param("productId") UUID productId, @Param("cartId") UUID cartId);
 }

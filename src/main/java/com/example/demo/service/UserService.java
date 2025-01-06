@@ -4,7 +4,6 @@ import com.example.demo.dto.user.ChangeUserRoleReqDto;
 import com.example.demo.dto.user.UpdateUserDto;
 import com.example.demo.dto.user.UserResDto;
 import com.example.demo.exception.AlreadyExistException;
-import com.example.demo.exception.InvalidDataException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.mapper.user.UserMapper;
 import com.example.demo.model.user.User;
@@ -49,9 +48,6 @@ public class UserService {
         user.setLastName(updateUserData.getLastName());
         user.setEmail(updateUserData.getEmail());
         if (updateUserData.getPassword() != null && !updateUserData.getPassword().isEmpty()) {
-            if (updateUserData.getPassword().length() < 8) {
-                throw new InvalidDataException("Password should be at least 8 characters long");
-            }
             user.setPassword(passwordEncoder.encode(updateUserData.getPassword()));
         }
 

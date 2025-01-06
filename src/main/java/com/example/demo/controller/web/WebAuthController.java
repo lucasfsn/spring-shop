@@ -3,9 +3,7 @@ package com.example.demo.controller.web;
 import com.example.demo.dto.user.AuthResDto;
 import com.example.demo.dto.user.UserLoginReqDto;
 import com.example.demo.dto.user.UserSignupReqDto;
-import com.example.demo.model.user.User;
 import com.example.demo.service.AuthService;
-import com.example.demo.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -22,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Data
 @Controller
 @RequestMapping("/auth")
-public class AuthController {
-    private  final AuthService authService;
+public class WebAuthController {
+    private final AuthService authService;
 
     @GetMapping("/signup")
     public String signUp(Model model) {
@@ -70,7 +68,7 @@ public class AuthController {
             return "login-form";
         }
         try {
-            AuthResDto authResDto =  authService.authenticate(user);
+            AuthResDto authResDto = authService.authenticate(user);
             Cookie cookie = new Cookie("auth_token", authResDto.getToken());
             cookie.setHttpOnly(true);
             cookie.setPath("/");

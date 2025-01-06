@@ -1,5 +1,6 @@
 package com.example.demo.dto.order;
 
+import com.example.demo.model.order.OrderStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -13,4 +14,5 @@ public class OrderResDto {
     private DeliveryInfoDto deliveryInfo;
     private List<OrderProductDto> products;
     private double totalPrice;
+    private OrderStatus status;
 }

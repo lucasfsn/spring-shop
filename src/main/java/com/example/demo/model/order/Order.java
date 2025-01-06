@@ -29,5 +29,8 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderElement> orderElements;
 
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
     private LocalDateTime createdAt;
 }

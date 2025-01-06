@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByUsername(String username);
 
-    @Query(value = "SELECT COUNT(*) > 0 FROM user WHERE email = :email AND id != :id", nativeQuery = true)
+    @Query("SELECT COUNT(u) > 0 FROM User u WHERE u.email = :email AND u.id != :id")
     boolean existsByEmailAndIdIsNot(@Param("email") String email, @Param("id") UUID id);
 
     boolean existsByUsername(String username);

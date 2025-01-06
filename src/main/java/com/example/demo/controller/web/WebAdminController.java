@@ -19,7 +19,7 @@ import java.util.UUID;
 @Data
 @Controller
 @RequestMapping("/admin")
-public class AdminController {
+public class WebAdminController {
     private final UserService userService;
     private final CategoryService categoryService;
 

@@ -1,6 +1,7 @@
 package com.example.demo.dto.user;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -18,6 +19,7 @@ public class UserSignupReqDto {
     private String username;
     @Email(message = "Email should be valid")
     private String email;
-    @Size(min = 8, message = "Password should be between 8 and 50 characters long")
+    @NotBlank(message = "Password cannot be blank")
+    @Pattern(regexp = "^\\S{8,}$", message = "Password should be at least 8 characters long and cannot contain any whitespace characters")
     private String password;
 }

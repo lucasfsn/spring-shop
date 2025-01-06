@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.order.ChangeOrderStatusDto;
 import com.example.demo.dto.order.DeliveryInfoDto;
 import com.example.demo.dto.order.OrderCreateDto;
 import com.example.demo.dto.order.OrderResDto;
@@ -12,6 +13,7 @@ import com.example.demo.model.cart.Cart;
 import com.example.demo.model.cart.CartElement;
 import com.example.demo.model.order.Order;
 import com.example.demo.model.order.OrderElement;
+import com.example.demo.model.order.OrderStatus;
 import com.example.demo.repository.OrderRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ import java.util.UUID;
 public class OrderService {
     private final OrderMapper orderMapper;
     private final OrderRepository orderRepository;
+    private final AuthService authService;
     private final OrderElementMapper orderElementMapper;
     private final CartService cartService;
     private final ProductService productService;
@@ -74,11 +77,24 @@ public class OrderService {
             throw new AccessDeniedException("You cannot delete this order");
         }
 
+        if (order.getStatus() != OrderStatus.PENDING) {
+            throw new InvalidDataException("You cannot delete this order because it is already processed");
+        }
+
         for (OrderElement orderElement : order.getOrderElements()) {
             productService.updateProductQuantity(orderElement.getProduct().getId(), orderElement.getQuantity());
         }
 
         orderRepository.deleteById(order.getId());
+    }
+
+    public OrderResDto updateOrderStatus(UserDetails userDetails, UUID id, ChangeOrderStatusDto orderStatusDto) {
+        authService.hasAdminAuthority(userDetails);
+
+        Order order = getOrderByID(id);
+        order.setStatus(orderStatusDto.getStatus());
+        Order updatedOrder = orderRepository.save(order);
+        return orderResDtoWithTotalPrice(updatedOrder);
     }
 
     private List<Order> getOrdersByUsername(String username) {
