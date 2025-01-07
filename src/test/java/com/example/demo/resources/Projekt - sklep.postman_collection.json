@@ -113,7 +113,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"firstName\": \"Testowy\",\r\n    \"lastName\": \"User\",\r\n    \"username\": \"customer\",\r\n    \"password\": \"1qazXSW@\",\r\n    \"email\": \"customer@mail.com\"\r\n}",
+					"raw": "{\r\n    \"firstName\": \"Testowy\",\r\n    \"lastName\": \"Test\",\r\n    \"username\": \"customer\",\r\n    \"password\": \"1qazXSW@\",\r\n    \"email\": \"customer@mail.com\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -160,7 +160,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/users/0266b0b2-fb5b-422f-99cb-5cf21b510ea4/role",
+					"raw": "http://localhost:8080/api/users/2392c118-0484-44a1-861b-15f17f998d36/role",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -169,7 +169,7 @@
 					"path": [
 						"api",
 						"users",
-						"0266b0b2-fb5b-422f-99cb-5cf21b510ea4",
+						"2392c118-0484-44a1-861b-15f17f998d36",
 						"role"
 					]
 				}
@@ -266,7 +266,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Owoce\"\r\n}",
+					"raw": "{\r\n    \"name\": \"Warzywa\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -421,7 +421,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/products?minPrice=10.5&maxPrice=112&sortBy=quantity&sortOrder=DESC",
+					"raw": "http://localhost:8080/api/products?minPrice=12&maxPrice=155.5&sortBy=quantity&sortOrder=DESC&available=false",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -434,11 +434,11 @@
 					"query": [
 						{
 							"key": "minPrice",
-							"value": "10.5"
+							"value": "12"
 						},
 						{
 							"key": "maxPrice",
-							"value": "112"
+							"value": "155.5"
 						},
 						{
 							"key": "sortBy",
@@ -447,6 +447,10 @@
 						{
 							"key": "sortOrder",
 							"value": "DESC"
+						},
+						{
+							"key": "available",
+							"value": "false"
 						}
 					]
 				}
@@ -470,7 +474,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Banan\",\r\n    \"description\": \"Premium luz\",\r\n    \"price\": 10.5,\r\n    \"available\": true,\r\n    \"quantity\": 100,\r\n    \"categories\": [\r\n        \"27f641d0-9f4e-4b6f-bcd5-6e1485310a43\",\r\n        \"db01e349-8675-4c84-bb45-d70582950ca8\"\r\n    ]\r\n}",
+					"raw": "{\r\n    \"name\": \"Banan\",\r\n    \"description\": \"Premium luz\",\r\n    \"price\": 10.5,\r\n    \"available\": true,\r\n    \"quantity\": 100,\r\n    \"categories\": [\r\n        \"59a53e9f-5d47-4f8e-a7f7-18f2fdb2ea63\"\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -517,7 +521,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/products/0d0f546f-9709-461f-860f-ad6d3b56403b",
+					"raw": "http://localhost:8080/api/products/76130003-99b8-4b8a-8892-4e2a303590e2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -526,7 +530,7 @@
 					"path": [
 						"api",
 						"products",
-						"0d0f546f-9709-461f-860f-ad6d3b56403b"
+						"76130003-99b8-4b8a-8892-4e2a303590e2"
 					]
 				}
 			},
@@ -548,7 +552,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/products/1e96493a-4b63-48a5-833f-fc90aeac0f1c",
+					"raw": "http://localhost:8080/api/products/76130003-99b8-4b8a-8892-4e2a303590e2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -557,7 +561,7 @@
 					"path": [
 						"api",
 						"products",
-						"1e96493a-4b63-48a5-833f-fc90aeac0f1c"
+						"76130003-99b8-4b8a-8892-4e2a303590e2"
 					]
 				}
 			},
@@ -609,7 +613,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/cart/products/0d0f546f-9709-461f-860f-ad6d3b56403b",
+					"raw": "http://localhost:8080/api/cart/products/27d6ffe3-c732-4da7-b9b4-cd5ad9f80de2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -619,7 +623,7 @@
 						"api",
 						"cart",
 						"products",
-						"0d0f546f-9709-461f-860f-ad6d3b56403b"
+						"27d6ffe3-c732-4da7-b9b4-cd5ad9f80de2"
 					]
 				}
 			},
@@ -641,7 +645,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/cart/products/0d0f546f-9709-461f-860f-ad6d3b56403b",
+					"raw": "http://localhost:8080/api/cart/products/4630b5a8-1689-46f4-bcea-b84c8e751919",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -651,7 +655,7 @@
 						"api",
 						"cart",
 						"products",
-						"0d0f546f-9709-461f-860f-ad6d3b56403b"
+						"4630b5a8-1689-46f4-bcea-b84c8e751919"
 					]
 				}
 			},
@@ -682,7 +686,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/cart/products/0d0f546f-9709-461f-860f-ad6d3b56403b",
+					"raw": "http://localhost:8080/api/cart/products/27d6ffe3-c732-4da7-b9b4-cd5ad9f80de2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -692,7 +696,7 @@
 						"api",
 						"cart",
 						"products",
-						"0d0f546f-9709-461f-860f-ad6d3b56403b"
+						"27d6ffe3-c732-4da7-b9b4-cd5ad9f80de2"
 					]
 				}
 			},
@@ -775,7 +779,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/orders/82a57111-1706-4977-8d8d-1e2860b50b03",
+					"raw": "http://localhost:8080/api/orders/10ba30d3-f243-49c2-9514-817eafa3966e",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -784,7 +788,7 @@
 					"path": [
 						"api",
 						"orders",
-						"82a57111-1706-4977-8d8d-1e2860b50b03"
+						"10ba30d3-f243-49c2-9514-817eafa3966e"
 					]
 				}
 			},
@@ -854,7 +858,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/orders/39ff6d33-4e8e-47ac-a8b3-45ffe15c5ec9\t",
+					"raw": "http://localhost:8080/api/orders/08298ad2-6b6f-4d17-9e06-822e52eab845\t",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -863,7 +867,7 @@
 					"path": [
 						"api",
 						"orders",
-						"39ff6d33-4e8e-47ac-a8b3-45ffe15c5ec9\t"
+						"08298ad2-6b6f-4d17-9e06-822e52eab845\t"
 					]
 				}
 			},
@@ -885,7 +889,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/orders/82a57111-1706-4977-8d8d-1e2860b50b03",
+					"raw": "http://localhost:8080/api/orders/fb5740fd-6c6c-4c85-9400-0bd5ff3d4272",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -894,7 +898,7 @@
 					"path": [
 						"api",
 						"orders",
-						"82a57111-1706-4977-8d8d-1e2860b50b03"
+						"fb5740fd-6c6c-4c85-9400-0bd5ff3d4272"
 					]
 				}
 			},

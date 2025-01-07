@@ -20,8 +20,8 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NotBlank(message = "Name cannot be empty")
-    @Size(min = 2, max = 50, message = "Name should be between 2 and 50 characters long")
+    @NotBlank(message = "Category name cannot be empty")
+    @Size(min = 2, max = 50, message = "Category name should be between 2 and 50 characters long")
     private String name;
 
     @ManyToMany(mappedBy = "categories")

@@ -19,7 +19,7 @@ public class DeliveryInfoDto {
     @NotBlank(message = "House number should not be blank")
     @Size(min = 1, message = "House number should have at least 1 character")
     private String houseNumber;
-    @Pattern(regexp = "\\S.*", message = "Flat number should have at least 1 character")
+    @Pattern(regexp = "\\S.*", message = "Flat number should start with a non-whitespace character and have at least 1 character")
     private String flatNumber;
     @NotBlank(message = "City should not be blank")
     @Size(min = 3, message = "City should have at least 3 characters")

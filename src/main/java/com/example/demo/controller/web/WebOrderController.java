@@ -4,13 +4,11 @@ import com.example.demo.dto.order.DeliveryInfoDto;
 import com.example.demo.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.Data;
-import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -20,11 +18,6 @@ import java.util.UUID;
 @RequestMapping("/orders")
 public class WebOrderController {
     private final OrderService orderService;
-
-    @InitBinder("deliveryInfoForm")
-    public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
-    }
 
     @GetMapping
     public String getOrders(Model model, @AuthenticationPrincipal UserDetails userDetails) {

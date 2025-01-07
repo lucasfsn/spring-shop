@@ -8,9 +8,9 @@ import java.util.UUID;
 
 @Data
 public class ProductReqDto {
-    @NotBlank(message = "Name cannot be empty")
-    @Pattern(regexp = "^[A-Z][a-zA-Z\\s]*$", message = "Name should start with an uppercase letter and contain only letters and spaces")
-    @Size(min = 2, max = 25, message = "Name should be between 2 and 25 characters long")
+    @NotBlank(message = "Product name cannot be empty")
+    @Pattern(regexp = "^[A-Z][a-zA-Z\\s]*$", message = "Product name should start with an uppercase letter and contain only letters and spaces")
+    @Size(min = 2, max = 25, message = "Product name should be between 2 and 25 characters long")
     private String name;
     @NotBlank(message = "Description cannot be empty")
     @Pattern(regexp = "^[a-zA-Z0-9\\s]*$", message = "Description should contain only letters, digits, and spaces")

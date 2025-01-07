@@ -90,11 +90,11 @@ public class OrderService {
         Order order = getOrderByID(id);
 
         if (!order.getUser().getUsername().equals(userDetails.getUsername())) {
-            throw new AccessDeniedException("You cannot delete this order");
+            throw new AccessDeniedException("You do not have access to cancel this order");
         }
 
         if (order.getStatus() != OrderStatus.PENDING) {
-            throw new InvalidDataException("You cannot delete this order because it is already processed");
+            throw new InvalidDataException("You cannot cancel this order because it is confirmed and already processed");
         }
 
         for (OrderElement orderElement : order.getOrderElements()) {
