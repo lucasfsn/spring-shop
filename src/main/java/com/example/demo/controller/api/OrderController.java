@@ -9,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,7 +36,8 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<OrderCreateDto> createOrder(@Valid @RequestBody DeliveryInfoDto deliveryInfoDto, @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.status(201).body(orderService.createOrder(userDetails, deliveryInfoDto));
+        OrderCreateDto createdOrder = orderService.createOrder(userDetails, deliveryInfoDto);
+        return ResponseEntity.created(URI.create("/api/orders/" + createdOrder.getId())).body(createdOrder);
     }
 
     @DeleteMapping("/{id}")

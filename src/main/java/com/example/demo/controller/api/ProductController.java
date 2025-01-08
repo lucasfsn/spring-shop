@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.UUID;
 
 @RestController
@@ -41,6 +42,7 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ProductResDto> createProduct(@Valid @RequestBody ProductReqDto productData) {
-        return ResponseEntity.status(201).body(productService.createProduct(productData));
+        ProductResDto createdProduct = productService.createProduct(productData);
+        return ResponseEntity.created(URI.create("/api/products/" + createdProduct.getId())).body(createdProduct);
     }
 }
