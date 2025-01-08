@@ -1,9 +1,11 @@
 package com.example.demo.dto.user;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 public class AuthResDto {
     private String token;

@@ -23,20 +23,18 @@ public class CartElementMapper {
         }
 
         Product product = cartElement.getProduct();
-        CartElementResDto dto = new CartElementResDto();
-
-        dto.setProductId(product.getId());
-        dto.setProductName(product.getName());
-        dto.setProductDescription(product.getDescription());
-        dto.setProductPrice(product.getPrice());
-        dto.setQuantity(cartElement.getQuantity());
 
         List<CategoryResDto> categories = product.getCategories().stream()
                 .map(categoryMapper::toDto)
                 .collect(Collectors.toList());
-        dto.setProductCategories(categories);
 
-        return dto;
+        return CartElementResDto.builder()
+                .productId(product.getId())
+                .productName(product.getName())
+                .productDescription(product.getDescription())
+                .productPrice(product.getPrice())
+                .quantity(cartElement.getQuantity())
+                .productCategories(categories).build();
     }
 
     public CartElement toEntity(Cart cart, Product product, int quantity) {
@@ -44,10 +42,10 @@ public class CartElementMapper {
             return null;
         }
 
-        CartElement cartElement = new CartElement();
-        cartElement.setCart(cart);
-        cartElement.setProduct(product);
-        cartElement.setQuantity(quantity);
-        return cartElement;
+        return CartElement.builder()
+                .cart(cart)
+                .product(product)
+                .quantity(quantity)
+                .build();
     }
 }

@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -22,23 +21,23 @@ public class ProductMapper {
             return null;
         }
 
-        ProductResDto productDto = new ProductResDto();
-        productDto.setId(product.getId());
-        productDto.setName(product.getName());
-        productDto.setDescription(product.getDescription());
-        productDto.setPrice(product.getPrice());
-        productDto.setAvailable(product.isAvailable());
-        productDto.setQuantity(product.getQuantity());
-
+        List<CategoryResDto> categoriesDto = null;
         if (product.getCategories() != null) {
-            List<CategoryResDto> categoryDtos = product.getCategories()
+            categoriesDto = product.getCategories()
                     .stream()
                     .map(categoryMapper::toDto)
-                    .collect(Collectors.toList());
-            productDto.setCategories(categoryDtos);
+                    .toList();
         }
 
-        return productDto;
+        return ProductResDto.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .description(product.getDescription())
+                .price(product.getPrice())
+                .available(product.isAvailable())
+                .quantity(product.getQuantity())
+                .categories(categoriesDto)
+                .build();
     }
 
     public Product toEntity(ProductReqDto productDto, List<Category> categories) {
@@ -46,15 +45,14 @@ public class ProductMapper {
             return null;
         }
 
-        Product product = new Product();
-        product.setName(productDto.getName());
-        product.setDescription(productDto.getDescription());
-        product.setPrice(productDto.getPrice());
-        product.setAvailable(productDto.isAvailable());
-        product.setQuantity(productDto.getQuantity());
-        product.setCategories(categories);
-
-        return product;
+        return Product.builder()
+                .name(productDto.getName())
+                .description(productDto.getDescription())
+                .price(productDto.getPrice())
+                .available(productDto.isAvailable())
+                .quantity(productDto.getQuantity())
+                .categories(categories)
+                .build();
     }
 
     public Product toExistingEntity(Product product, ProductReqDto productDto, List<Category> categories) {
@@ -68,7 +66,6 @@ public class ProductMapper {
         product.setAvailable(productDto.isAvailable());
         product.setQuantity(productDto.getQuantity());
         product.setCategories(categories);
-
         return product;
     }
 }

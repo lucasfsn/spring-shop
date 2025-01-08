@@ -15,11 +15,11 @@ public class OrderElementMapper {
             return null;
         }
 
-        OrderElement orderElement = new OrderElement();
-        orderElement.setProduct(cartElement.getProduct());
-        orderElement.setOrder(order);
-        orderElement.setQuantity(cartElement.getQuantity());
-        return orderElement;
+        return OrderElement.builder()
+                .product(cartElement.getProduct())
+                .order(order)
+                .quantity(cartElement.getQuantity())
+                .build();
     }
 
     public OrderProductDto toDto(OrderElement entity) {
@@ -27,12 +27,12 @@ public class OrderElementMapper {
             return null;
         }
 
-        OrderProductDto dto = new OrderProductDto();
-        dto.setId(entity.getProduct().getId());
-        dto.setName(entity.getProduct().getName());
-        dto.setDescription(entity.getProduct().getDescription());
-        dto.setPrice(entity.getProduct().getPrice());
-        dto.setQuantity(entity.getQuantity());
-        return dto;
+        return OrderProductDto.builder()
+                .id(entity.getProduct().getId())
+                .name(entity.getProduct().getName())
+                .description(entity.getProduct().getDescription())
+                .price(entity.getProduct().getPrice())
+                .quantity(entity.getQuantity())
+                .build();
     }
 }

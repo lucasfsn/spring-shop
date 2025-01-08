@@ -1,9 +1,11 @@
 package com.example.demo.dto.cart;
 
 import jakarta.validation.constraints.Positive;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class CartQuantityReqDto {
     @Positive(message = "Quantity must be positive")
     private int quantity;

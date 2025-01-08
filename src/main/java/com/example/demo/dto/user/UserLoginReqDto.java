@@ -1,9 +1,11 @@
 package com.example.demo.dto.user;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class UserLoginReqDto {
     @NotBlank(message = "Username cannot be blank")
     private String username;

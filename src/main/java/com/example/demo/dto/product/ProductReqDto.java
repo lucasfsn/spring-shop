@@ -1,12 +1,14 @@
 package com.example.demo.dto.product;
 
 import jakarta.validation.constraints.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 public class ProductReqDto {
     @NotBlank(message = "Product name cannot be empty")
     @Pattern(regexp = "^[A-Z][a-zA-Z\\s]*$", message = "Product name should start with an uppercase letter and contain only letters and spaces")

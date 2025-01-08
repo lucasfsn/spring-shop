@@ -11,17 +11,16 @@ public class DeliveryInfoMapper {
             return null;
         }
 
-        DeliveryInfo deliveryInfo = new DeliveryInfo();
-        deliveryInfo.setEmail(dto.getEmail());
-        deliveryInfo.setPhoneNumber(dto.getPhoneNumber());
-        deliveryInfo.setStreet(dto.getStreet());
-        deliveryInfo.setHouseNumber(dto.getHouseNumber());
-        deliveryInfo.setFlatNumber(dto.getFlatNumber());
-        deliveryInfo.setCity(dto.getCity());
-        deliveryInfo.setPostalCode(dto.getPostalCode());
-        deliveryInfo.setCountry(dto.getCountry());
-
-        return deliveryInfo;
+        return DeliveryInfo.builder()
+                .email(dto.getEmail())
+                .phoneNumber(dto.getPhoneNumber())
+                .street(dto.getStreet())
+                .houseNumber(dto.getHouseNumber())
+                .flatNumber(dto.getFlatNumber())
+                .city(dto.getCity())
+                .postalCode(dto.getPostalCode())
+                .country(dto.getCountry())
+                .build();
     }
 
     public DeliveryInfoDto toDto(DeliveryInfo entity) {
@@ -29,16 +28,15 @@ public class DeliveryInfoMapper {
             return null;
         }
 
-        DeliveryInfoDto dto = new DeliveryInfoDto();
-        dto.setEmail(entity.getEmail());
-        dto.setPhoneNumber(entity.getPhoneNumber());
-        dto.setStreet(entity.getStreet());
-        dto.setHouseNumber(entity.getHouseNumber());
-        dto.setFlatNumber(entity.getFlatNumber());
-        dto.setCity(entity.getCity());
-        dto.setPostalCode(entity.getPostalCode());
-        dto.setCountry(entity.getCountry());
-
-        return dto;
+        return DeliveryInfoDto.builder()
+                .email(entity.getEmail())
+                .phoneNumber(entity.getPhoneNumber())
+                .street(entity.getStreet())
+                .houseNumber(entity.getHouseNumber())
+                .flatNumber(entity.getFlatNumber())
+                .city(entity.getCity())
+                .postalCode(entity.getPostalCode())
+                .country(entity.getCountry())
+                .build();
     }
 }

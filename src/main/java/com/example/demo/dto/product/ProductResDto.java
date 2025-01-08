@@ -1,12 +1,16 @@
 package com.example.demo.dto.product;
 
 import com.example.demo.dto.category.CategoryResDto;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
+@Builder
 public class ProductResDto {
     private UUID id;
     private String name;

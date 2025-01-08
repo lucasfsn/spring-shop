@@ -11,18 +11,20 @@ public class CategoryMapper {
         if (category == null) {
             return null;
         }
-        CategoryResDto categoryDto = new CategoryResDto();
-        categoryDto.setId(category.getId());
-        categoryDto.setName(category.getName());
-        return categoryDto;
+
+        return CategoryResDto.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .build();
     }
 
     public Category toEntity(CategoryReqDto categoryDto) {
         if (categoryDto == null) {
             return null;
         }
-        Category category = new Category();
-        category.setName(categoryDto.getName());
-        return category;
+
+        return Category.builder()
+                .name(categoryDto.getName())
+                .build();
     }
 }

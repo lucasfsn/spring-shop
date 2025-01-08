@@ -19,12 +19,13 @@ public class CartMapper {
             return null;
         }
 
-        CartDto dto = new CartDto();
-        dto.setId(cart.getId());
         List<CartElementResDto> cartElements = cart.getCartElements().stream()
                 .map(cartElementMapper::toDto)
                 .collect(Collectors.toList());
-        dto.setElements(cartElements);
-        return dto;
+
+        return CartDto.builder()
+                .id(cart.getId())
+                .elements(cartElements)
+                .build();
     }
 }

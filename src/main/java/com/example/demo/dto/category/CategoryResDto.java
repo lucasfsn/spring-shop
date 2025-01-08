@@ -1,9 +1,14 @@
 package com.example.demo.dto.category;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
+@Builder
 public class CategoryResDto {
     private UUID id;
     private String name;

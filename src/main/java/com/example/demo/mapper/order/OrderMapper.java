@@ -21,15 +21,15 @@ public class OrderMapper {
             return null;
         }
 
-        OrderResDto dto = new OrderResDto();
-        dto.setId(order.getId());
-        dto.setDeliveryInfo(deliveryInfoMapper.toDto(order.getDeliveryInfo()));
-        dto.setProducts(order.getOrderElements().stream()
-                .map(orderElementMapper::toDto)
-                .toList());
-        dto.setCreatedAt(order.getCreatedAt());
-        dto.setStatus(order.getStatus());
-        return dto;
+        return OrderResDto.builder()
+                .id(order.getId())
+                .deliveryInfo(deliveryInfoMapper.toDto(order.getDeliveryInfo()))
+                .products(order.getOrderElements().stream()
+                        .map(orderElementMapper::toDto)
+                        .toList())
+                .createdAt(order.getCreatedAt())
+                .status(order.getStatus())
+                .build();
     }
 
     public Order toEntity(DeliveryInfoDto deliveryInfoDto, User user) {
@@ -37,11 +37,11 @@ public class OrderMapper {
             return null;
         }
 
-        Order order = new Order();
-        order.setUser(user);
-        order.setDeliveryInfo(deliveryInfoMapper.toEntity(deliveryInfoDto));
-        order.setCreatedAt(LocalDateTime.now());
-        order.setStatus(OrderStatus.PENDING);
-        return order;
+        return Order.builder()
+                .user(user)
+                .deliveryInfo(deliveryInfoMapper.toEntity(deliveryInfoDto))
+                .createdAt(LocalDateTime.now())
+                .status(OrderStatus.PENDING)
+                .build();
     }
 }

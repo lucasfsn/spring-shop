@@ -4,6 +4,7 @@ import com.example.demo.model.product.Product;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class OrderElement {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

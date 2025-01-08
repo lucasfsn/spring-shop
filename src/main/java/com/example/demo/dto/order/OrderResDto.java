@@ -1,13 +1,17 @@
 package com.example.demo.dto.order;
 
 import com.example.demo.model.order.OrderStatus;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
+@Builder
 public class OrderResDto {
     private UUID id;
     private LocalDateTime createdAt;

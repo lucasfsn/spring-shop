@@ -2,9 +2,11 @@ package com.example.demo.dto.category;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class CategoryReqDto {
     @NotBlank(message = "Category name cannot be empty")
     @Size(min = 2, max = 50, message = "Category name should be between 2 and 50 characters long")

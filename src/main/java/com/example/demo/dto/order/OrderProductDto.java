@@ -1,10 +1,14 @@
 package com.example.demo.dto.order;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
+@Builder
 public class OrderProductDto {
     private UUID id;
     private String name;
