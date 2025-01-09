@@ -1,6 +1,7 @@
 package com.example.demo.controller.api;
 
 import com.example.demo.dto.user.ChangeUserRoleReqDto;
+import com.example.demo.dto.user.SearchUserResDto;
 import com.example.demo.dto.user.UpdateUserDto;
 import com.example.demo.dto.user.UserResDto;
 import com.example.demo.service.UserService;
@@ -11,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -22,6 +24,11 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserResDto> getUser(@PathVariable UUID id) {
         return ResponseEntity.ok(userService.getUser(id));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<SearchUserResDto>> searchUsers(@RequestParam String pattern) {
+        return ResponseEntity.ok(userService.searchUsers(pattern));
     }
 
     @PatchMapping("/{id}/role")

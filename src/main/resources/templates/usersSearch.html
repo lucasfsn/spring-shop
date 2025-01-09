@@ -24,23 +24,18 @@
             <a th:href="@{'/auth/signup'}">Signup</a>
         </div>
     </nav>
-    <form action="/auth/login" th:object="${loginForm}" method="post">
-        <h1 class="title">Login</h1>
-        <div class="form-row">
-            <label for="username">Username</label>
-            <input type="text" id="username" th:field="*{username}"/>
-            <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="error"></div>
-        </div>
-        <div class="form-row">
-            <label for="password">Password</label>
-            <input type="password" id="password" th:field="*{password}"/>
-            <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></div>
-        </div>
-        <div th:if="${error}" class="error-service">
-            <p th:text="${error}"></p>
-        </div>
-        <button class="btn" type="submit">Login</button>
-    </form>
+    <div class="search-wrapper">
+        <h1>Search users</h1>
+        <form action="#" th:action="@{/users/search}" method="get">
+            <input type="text" name="pattern" placeholder="Search..." aria-label="Search"/>
+            <button type="submit" class="btn">Search</button>
+        </form>
+        <ul>
+            <li th:each="user : ${users}">
+                <a th:href="@{'/users/' + ${user.id}}" th:text="${user.firstName} + ' ' + ${user.lastName}"></a>
+            </li>
+        </ul>
+    </div>
 </div>
 </body>
 </html>

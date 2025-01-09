@@ -13,6 +13,7 @@
             <img src="/images/cart.png" alt="Logo">
         </a>
         <div class="nav-buttons" th:if="${session.user != null}">
+            <a th:href="@{'/users/search'}">Search users</a>
             <a th:href="@{'/products'}">Products</a>
             <a th:unless="${session.user.hasAdminRole()}" th:href="@{'/orders'}">Orders</a>
             <a th:unless="${session.user.hasAdminRole()}" th:href="@{'/cart'}">Cart</a>

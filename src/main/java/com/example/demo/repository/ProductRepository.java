@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ProductRepository extends JpaRepository<Product, UUID> {
@@ -29,4 +30,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
                                  @Param("maxQuantity") Integer maxQuantity,
                                  @Param("available") Boolean available,
                                  Pageable pageable);
+
+    @Query("SELECT p FROM Product p LEFT JOIN FETCH p.categories WHERE p.id = :productId")
+    Optional<Product> findProductById(@Param("productId") UUID productId);
 }

@@ -1,5 +1,6 @@
 package com.example.demo.mapper.user;
 
+import com.example.demo.dto.user.SearchUserResDto;
 import com.example.demo.dto.user.UserResDto;
 import com.example.demo.dto.user.UserSignupReqDto;
 import com.example.demo.model.user.User;
@@ -19,6 +20,19 @@ public class UserMapper {
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .role(user.getRole())
+                .build();
+    }
+
+    public SearchUserResDto toSearchDto(User user) {
+        if (user == null) {
+            return null;
+        }
+
+        return SearchUserResDto.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .username(user.getUsername())
                 .build();
     }
 

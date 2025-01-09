@@ -21,13 +21,16 @@ public class ProjektApplication {
             if (userRepository.existsByUsername("admin-user")) {
                 return;
             }
-            User user = new User();
-            user.setFirstName("Admin");
-            user.setLastName("User");
-            user.setUsername("admin-user");
-            user.setEmail("admin@mail.com");
-            user.setPassword(passwordEncoder.encode("password"));
-            user.setRole(UserRole.ADMIN);
+
+            User user = User.builder()
+                    .firstName("Admin")
+                    .lastName("User")
+                    .username("admin-user")
+                    .email("admin@mail.com")
+                    .password(passwordEncoder.encode("password"))
+                    .role(UserRole.ADMIN)
+                    .build();
+            
             userRepository.save(user);
         };
     }

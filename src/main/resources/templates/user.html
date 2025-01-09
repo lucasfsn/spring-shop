@@ -24,23 +24,11 @@
             <a th:href="@{'/auth/signup'}">Signup</a>
         </div>
     </nav>
-    <form action="/auth/login" th:object="${loginForm}" method="post">
-        <h1 class="title">Login</h1>
-        <div class="form-row">
-            <label for="username">Username</label>
-            <input type="text" id="username" th:field="*{username}"/>
-            <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="error"></div>
-        </div>
-        <div class="form-row">
-            <label for="password">Password</label>
-            <input type="password" id="password" th:field="*{password}"/>
-            <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></div>
-        </div>
-        <div th:if="${error}" class="error-service">
-            <p th:text="${error}"></p>
-        </div>
-        <button class="btn" type="submit">Login</button>
-    </form>
+    <div>
+        <h1><span th:text="${user.username}"></span> profile</h1>
+        <p><strong>First name:</strong> <span th:text="${user.firstName}"></span></p>
+        <p><strong>Last name:</strong> <span th:text="${user.lastName}"></span></p>
+    </div>
 </div>
 </body>
 </html>

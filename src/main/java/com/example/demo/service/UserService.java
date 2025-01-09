@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.user.ChangeUserRoleReqDto;
+import com.example.demo.dto.user.SearchUserResDto;
 import com.example.demo.dto.user.UpdateUserDto;
 import com.example.demo.dto.user.UserResDto;
 import com.example.demo.exception.AlreadyExistException;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -25,6 +27,14 @@ public class UserService {
     public UserResDto getUser(UUID id) {
         User user = getUserById(id);
         return userMapper.toDto(user);
+    }
+
+    public List<SearchUserResDto> searchUsers(String pattern) {
+        List<User> users = userRepository.searchUsersByName(pattern);
+
+        return users.stream()
+                .map(userMapper::toSearchDto)
+                .toList();
     }
 
     public UserResDto changeUserRole(UUID id, ChangeUserRoleReqDto role) {

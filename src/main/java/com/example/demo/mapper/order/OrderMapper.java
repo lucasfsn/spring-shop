@@ -16,7 +16,7 @@ public class OrderMapper {
     private final DeliveryInfoMapper deliveryInfoMapper;
     private final OrderElementMapper orderElementMapper;
 
-    public OrderResDto toDto(Order order) {
+    public OrderResDto toDto(Order order, Double totalPrice) {
         if (order == null) {
             return null;
         }
@@ -29,6 +29,7 @@ public class OrderMapper {
                         .toList())
                 .createdAt(order.getCreatedAt())
                 .status(order.getStatus())
+                .totalPrice(totalPrice)
                 .build();
     }
 

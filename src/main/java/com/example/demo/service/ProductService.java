@@ -63,7 +63,7 @@ public class ProductService {
         List<Category> categories = categoryRepository.findAllById(productData.getCategories());
 
         if (categories.size() != productData.getCategories().size()) {
-            throw new ResourceNotFoundException("All categories have not been found");
+            throw new ResourceNotFoundException("Categories not found");
         }
 
         Product updatedProduct = productMapper.toExistingEntity(getProductById(id), productData, categories);
@@ -73,8 +73,9 @@ public class ProductService {
 
     public ProductResDto createProduct(ProductReqDto productData) {
         List<Category> categories = categoryRepository.findAllById(productData.getCategories());
+
         if (categories.size() != productData.getCategories().size()) {
-            throw new ResourceNotFoundException("All categories have not been found");
+            throw new ResourceNotFoundException("Categories not found");
         }
 
         Product product = productMapper.toEntity(productData, categories);
@@ -89,6 +90,6 @@ public class ProductService {
     }
 
     public Product getProductById(UUID id) {
-        return productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        return productRepository.findProductById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 }

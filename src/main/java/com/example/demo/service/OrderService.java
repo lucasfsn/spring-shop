@@ -31,39 +31,48 @@ public class OrderService {
 
     public List<OrderAdminResDto> getOrdersFromAllUsers() {
         List<Object[]> results = orderRepository.findAllUsersOrders();
-        Map<UUID, List<Order>> userOrdersMap = new HashMap<>();
+        Map<UUID, List<OrderWithTotalPriceDto>> userOrdersMap = new HashMap<>();
 
         for (Object[] result : results) {
             UUID userId = (UUID) result[0];
             Order order = (Order) result[1];
-            userOrdersMap.computeIfAbsent(userId, k -> new ArrayList<>()).add(order);
+            Double totalPrice = (Double) result[2];
+            OrderWithTotalPriceDto orderWithTotalPrice = OrderWithTotalPriceDto.builder()
+                    .order(order)
+                    .totalPrice(totalPrice)
+                    .build();
+            userOrdersMap.computeIfAbsent(userId, k -> new ArrayList<>()).add(orderWithTotalPrice);
         }
 
         return userOrdersMap.entrySet().stream()
                 .map(entry -> {
                     UUID userId = entry.getKey();
                     List<OrderResDto> ordersDto = entry.getValue().stream()
-                            .map(this::orderResDtoWithTotalPrice)
+                            .map(orderWithTotalPrice -> orderMapper.toDto(orderWithTotalPrice.getOrder(), orderWithTotalPrice.getTotalPrice()))
                             .toList();
-                    return new OrderAdminResDto(userId, ordersDto);
+                    return OrderAdminResDto.builder()
+                            .userId(userId)
+                            .orders(ordersDto)
+                            .build();
                 })
                 .toList();
     }
 
     public List<OrderResDto> getOrders(UserDetails userDetails) {
-        List<Order> orders = getOrdersByUsername(userDetails.getUsername());
-
-        return orders.stream().map(this::orderResDtoWithTotalPrice).toList();
+        List<Object[]> results = orderRepository.findOrdersByUsername(userDetails.getUsername());
+        return results.stream()
+                .map(result -> orderMapper.toDto((Order) result[0], (Double) result[1]))
+                .toList();
     }
 
     public OrderResDto getOrder(UserDetails userDetails, UUID id) {
-        Order order = getOrderByID(id);
+        OrderWithTotalPriceDto order = getOrderByID(id);
 
-        if (!order.getUser().getUsername().equals(userDetails.getUsername())) {
+        if (!order.getOrder().getUser().getUsername().equals(userDetails.getUsername())) {
             throw new AccessDeniedException("You cannot access this order");
         }
 
-        return orderResDtoWithTotalPrice(order);
+        return orderMapper.toDto(order.getOrder(), order.getTotalPrice());
     }
 
     public OrderCreateDto createOrder(UserDetails userDetails, DeliveryInfoDto deliveryInfoDto) {
@@ -83,46 +92,38 @@ public class OrderService {
         order.setOrderElements(orderElements);
         Order savedOrder = orderRepository.save(order);
         cartService.clearCart(userDetails.getUsername());
-        return new OrderCreateDto(savedOrder.getId());
+        return OrderCreateDto.builder()
+                .id(savedOrder.getId())
+                .build();
     }
 
     public void deleteOrder(UserDetails userDetails, UUID id) {
-        Order order = getOrderByID(id);
+        OrderWithTotalPriceDto order = getOrderByID(id);
 
-        if (!order.getUser().getUsername().equals(userDetails.getUsername())) {
+        if (userDetails.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ROLE_ADMIN")) && !order.getOrder().getUser().getUsername().equals(userDetails.getUsername())) {
             throw new AccessDeniedException("You do not have access to cancel this order");
         }
 
-        if (order.getStatus() != OrderStatus.PENDING) {
+        if (order.getOrder().getStatus() != OrderStatus.PENDING) {
             throw new InvalidDataException("You cannot cancel this order because it is confirmed and already processed");
         }
 
-        for (OrderElement orderElement : order.getOrderElements()) {
+        for (OrderElement orderElement : order.getOrder().getOrderElements()) {
             productService.updateProductQuantity(orderElement.getProduct().getId(), orderElement.getQuantity());
         }
 
-        orderRepository.deleteById(order.getId());
+        orderRepository.deleteById(order.getOrder().getId());
     }
 
     public OrderResDto updateOrderStatus(UUID id, ChangeOrderStatusDto orderStatusDto) {
-        Order order = getOrderByID(id);
-        order.setStatus(orderStatusDto.getStatus());
-        Order updatedOrder = orderRepository.save(order);
-        return orderResDtoWithTotalPrice(updatedOrder);
+        OrderWithTotalPriceDto order = getOrderByID(id);
+        order.getOrder().setStatus(orderStatusDto.getStatus());
+        Order updatedOrder = orderRepository.save(order.getOrder());
+        return orderMapper.toDto(updatedOrder, order.getTotalPrice());
     }
 
-    private List<Order> getOrdersByUsername(String username) {
-        return orderRepository.findOrdersByUsername(username);
-    }
-
-    private Order getOrderByID(UUID id) {
-        return orderRepository.findById(id)
+    private OrderWithTotalPriceDto getOrderByID(UUID id) {
+        return orderRepository.findOrderWithTotalPrice(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
-    }
-
-    private OrderResDto orderResDtoWithTotalPrice(Order order) {
-        OrderResDto dto = orderMapper.toDto(order);
-        dto.setTotalPrice(orderRepository.findTotalPriceByOrderId(order.getId()));
-        return dto;
     }
 }

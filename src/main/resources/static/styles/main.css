@@ -194,3 +194,17 @@ table tr:last-child {
 .text-center {
     text-align: center;
 }
+
+.search-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.search-wrapper ul {
+    list-style: none;
+}
+
+.search-wrapper li {
+    text-align: center;
+}

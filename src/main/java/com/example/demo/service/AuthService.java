@@ -48,7 +48,10 @@ public class AuthService {
         User savedUser = userRepository.save(user);
         String token = jwtService.generateToken(savedUser);
 
-        return new AuthResDto(token, userMapper.toDto(savedUser));
+        return AuthResDto.builder()
+                .token(token)
+                .user(userMapper.toDto(savedUser))
+                .build();
     }
 
     public AuthResDto authenticate(UserLoginReqDto request) {
@@ -64,6 +67,9 @@ public class AuthService {
 
         String token = jwtService.generateToken(user);
 
-        return new AuthResDto(token, userMapper.toDto(user));
+        return AuthResDto.builder()
+                .token(token)
+                .user(userMapper.toDto(user))
+                .build();
     }
 }
