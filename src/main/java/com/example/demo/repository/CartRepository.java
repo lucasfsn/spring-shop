@@ -10,7 +10,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface CartRepository extends JpaRepository<Cart, UUID> {
-    @Query("SELECT c FROM Cart c JOIN c.user u WHERE u.username = :username")
+    //    @Query("SELECT c FROM Cart c JOIN c.user u WHERE u.username = :username")
+    //    Optional<Cart> findByUsername(@Param("username") String username);
+    @Query("SELECT c FROM Cart c " +
+            "JOIN c.user u " +
+            "LEFT JOIN FETCH c.cartElements ce " +
+            "LEFT JOIN FETCH ce.product p " +
+            "WHERE u.username = :username")
     Optional<Cart> findByUsername(@Param("username") String username);
 
     @Query(value = "SELECT * FROM cart_element el WHERE el.product_id = :productId AND el.cart_id = :cartId", nativeQuery = true)

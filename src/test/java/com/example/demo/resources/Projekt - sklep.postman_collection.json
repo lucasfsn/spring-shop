@@ -265,6 +265,43 @@
 			"response": []
 		},
 		{
+			"name": "Szukanie użytkowników",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/users/search?pattern=Test",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"search"
+					],
+					"query": [
+						{
+							"key": "pattern",
+							"value": "Test"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Pobieranie wszystkich kategorii",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
@@ -341,7 +378,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Warzywa\"\r\n}",
+					"raw": "{\r\n    \"name\": \"Owoce\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -404,7 +441,7 @@
 			"response": []
 		},
 		{
-			"name": "Pobieranie produktów",
+			"name": "Pobieranie produktów Copy",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -526,6 +563,44 @@
 						{
 							"key": "available",
 							"value": "false"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pobieranie produktu",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/products/{{PRODUCT_ID}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						"{{PRODUCT_ID}}"
+					],
+					"query": [
+						{
+							"key": "sortOrder",
+							"value": "DESC",
+							"disabled": true
 						}
 					]
 				}
@@ -929,7 +1004,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/orders/10ba30d3-f243-49c2-9514-817eafa3966e",
+					"raw": "http://localhost:8080/api/orders/{{ORDER_ID}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -938,7 +1013,7 @@
 					"path": [
 						"api",
 						"orders",
-						"10ba30d3-f243-49c2-9514-817eafa3966e"
+						"{{ORDER_ID}}"
 					]
 				}
 			},
@@ -1044,22 +1119,20 @@
 			"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pblVzZXIiLCJpYXQiOjE3MzU4MjEwMDUsImV4cCI6MTczNTkwNzQwNX0.HmtbPgTPONDDnGjTrG1AmXSz6I0X1sNUWiGgkyItHkLDXEBCIZ5hzLqduyXWQKbzjX7xMPQc4NUj0hChGTTCyQ"
 		},
 		{
-			"key": "CUSTOMER_ID",
-			"value": "",
-			"type": "string"
-		},
-		{
 			"key": "CATEGORY_ID",
-			"value": "9ad15224-d75c-46b3-9c6d-60b3df5d8b34"
+			"value": ""
 		},
 		{
 			"key": "PRODUCT_ID",
-			"value": "0ba1a2b3-1e52-410c-8efd-84c4e4de64a4"
+			"value": ""
+		},
+		{
+			"key": "CUSTOMER_ID",
+			"value": ""
 		},
 		{
 			"key": "ORDER_ID",
-			"value": "",
-			"type": "string"
+			"value": ""
 		}
 	]
 }

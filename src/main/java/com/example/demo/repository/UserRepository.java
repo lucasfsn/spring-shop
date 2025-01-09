@@ -23,5 +23,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     boolean existsByUsername(String username);
 
+    @Query(value = "SELECT COUNT(*) > 0 FROM user WHERE email = :email", nativeQuery = true)
     boolean existsByEmail(String email);
 }
