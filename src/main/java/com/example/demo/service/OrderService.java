@@ -11,10 +11,10 @@ import com.example.demo.model.cart.CartElement;
 import com.example.demo.model.order.Order;
 import com.example.demo.model.order.OrderElement;
 import com.example.demo.model.order.OrderStatus;
+import com.example.demo.model.user.User;
 import com.example.demo.repository.OrderRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -58,14 +58,14 @@ public class OrderService {
                 .toList();
     }
 
-    public List<OrderResDto> getOrders(UserDetails userDetails) {
+    public List<OrderResDto> getOrders(User userDetails) {
         List<Object[]> results = orderRepository.findOrdersByUsername(userDetails.getUsername());
         return results.stream()
                 .map(result -> orderMapper.toDto((Order) result[0], (Double) result[1]))
                 .toList();
     }
 
-    public OrderResDto getOrder(UserDetails userDetails, UUID id) {
+    public OrderResDto getOrder(User userDetails, UUID id) {
         OrderWithTotalPriceDto order = getOrderByID(id);
 
         if (!order.getOrder().getUser().getUsername().equals(userDetails.getUsername())) {
@@ -75,7 +75,7 @@ public class OrderService {
         return orderMapper.toDto(order.getOrder(), order.getTotalPrice());
     }
 
-    public OrderCreateDto createOrder(UserDetails userDetails, DeliveryInfoDto deliveryInfoDto) {
+    public OrderCreateDto createOrder(User userDetails, DeliveryInfoDto deliveryInfoDto) {
         Cart cart = cartService.getCartByUsername(userDetails.getUsername());
         List<CartElement> cartElements = cart.getCartElements();
 
@@ -91,13 +91,13 @@ public class OrderService {
 
         order.setOrderElements(orderElements);
         Order savedOrder = orderRepository.save(order);
-        cartService.clearCart(userDetails.getUsername());
+        cartService.clearCart(userDetails);
         return OrderCreateDto.builder()
                 .id(savedOrder.getId())
                 .build();
     }
 
-    public void deleteOrder(UserDetails userDetails, UUID id) {
+    public void deleteOrder(User userDetails, UUID id) {
         OrderWithTotalPriceDto order = getOrderByID(id);
 
         if (userDetails.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ROLE_ADMIN")) && !order.getOrder().getUser().getUsername().equals(userDetails.getUsername())) {

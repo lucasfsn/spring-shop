@@ -1,6 +1,8 @@
 package com.example.demo.filter;
 
+import com.example.demo.model.user.User;
 import com.example.demo.service.JwtService;
+import com.example.demo.service.UserDetailsServiceImp;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -10,8 +12,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -22,7 +22,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
+    private final UserDetailsServiceImp userDetailsService;
 
     @Override
     protected void doFilterInternal(
@@ -52,7 +52,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String username = jwtService.extractUsername(token);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            User userDetails = userDetailsService.loadUserByUsername(username);
             if (jwtService.isValid(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()

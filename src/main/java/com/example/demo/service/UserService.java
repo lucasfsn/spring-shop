@@ -10,7 +10,6 @@ import com.example.demo.mapper.user.UserMapper;
 import com.example.demo.model.user.User;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -44,29 +43,23 @@ public class UserService {
         return userMapper.toDto(updatedUser);
     }
 
-    public UserResDto updateUser(UserDetails userDetails, UpdateUserDto updateUserData) {
-        User user = getUserByUsername(userDetails.getUsername());
-
-        if (userRepository.existsByEmailAndIdIsNot(updateUserData.getEmail(), user.getId())) {
+    public UserResDto updateUser(User userDetails, UpdateUserDto updateUserData) {
+        if (userRepository.existsByEmailAndIdIsNot(updateUserData.getEmail(), userDetails.getId())) {
             throw new AlreadyExistException("Email already taken");
         }
 
-        user.setFirstName(updateUserData.getFirstName());
-        user.setLastName(updateUserData.getLastName());
-        user.setEmail(updateUserData.getEmail());
+        userDetails.setFirstName(updateUserData.getFirstName());
+        userDetails.setLastName(updateUserData.getLastName());
+        userDetails.setEmail(updateUserData.getEmail());
         if (updateUserData.getPassword() != null && !updateUserData.getPassword().isEmpty()) {
-            user.setPassword(passwordEncoder.encode(updateUserData.getPassword()));
+            userDetails.setPassword(passwordEncoder.encode(updateUserData.getPassword()));
         }
 
-        User updatedUser = userRepository.save(user);
+        User updatedUser = userRepository.save(userDetails);
         return userMapper.toDto(updatedUser);
     }
 
     private User getUserById(UUID id) {
         return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
-    }
-
-    private User getUserByUsername(String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }

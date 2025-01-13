@@ -1,11 +1,11 @@
 package com.example.demo.controller.web;
 
 import com.example.demo.dto.order.DeliveryInfoDto;
+import com.example.demo.model.user.User;
 import com.example.demo.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.Data;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,7 +20,7 @@ public class WebOrderController {
     private final OrderService orderService;
 
     @GetMapping
-    public String getOrders(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String getOrders(Model model, @AuthenticationPrincipal User userDetails) {
         model.addAttribute("orders", orderService.getOrders(userDetails));
         model.addAttribute("error", null);
         return "orders";
@@ -33,7 +33,7 @@ public class WebOrderController {
     }
 
     @PostMapping("/create")
-    public String createOrderForm(@Valid @ModelAttribute("deliveryInfoForm") DeliveryInfoDto deliveryInfoDto, BindingResult bindingResult, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String createOrderForm(@Valid @ModelAttribute("deliveryInfoForm") DeliveryInfoDto deliveryInfoDto, BindingResult bindingResult, Model model, @AuthenticationPrincipal User userDetails) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("deliveryInfoForm", deliveryInfoDto);
             return "delivery-form";
@@ -50,7 +50,7 @@ public class WebOrderController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteOrder(@PathVariable UUID id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String deleteOrder(@PathVariable UUID id, Model model, @AuthenticationPrincipal User userDetails) {
         try {
             orderService.deleteOrder(userDetails, id);
             return "redirect:/orders";

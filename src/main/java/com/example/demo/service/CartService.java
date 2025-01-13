@@ -11,10 +11,10 @@ import com.example.demo.mapper.cart.CartMapper;
 import com.example.demo.model.cart.Cart;
 import com.example.demo.model.cart.CartElement;
 import com.example.demo.model.product.Product;
+import com.example.demo.model.user.User;
 import com.example.demo.repository.CartRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -29,13 +29,13 @@ public class CartService {
     private final ProductService productService;
     private final CartElementMapper cartElementMapper;
 
-    public CartDto getUserCart(UserDetails userDetails) {
+    public CartDto getUserCart(User userDetails) {
         Cart cart = getCartByUsername(userDetails.getUsername());
 
         return cartMapper.toDto(cart);
     }
 
-    public CartDto addToCart(UserDetails userDetails, UUID productId) {
+    public CartDto addToCart(User userDetails, UUID productId) {
         Cart cart = getCartByUsername(userDetails.getUsername());
 
         Product product = productService.getProductById(productId);
@@ -62,7 +62,7 @@ public class CartService {
         return cartMapper.toDto(savedCart);
     }
 
-    public CartDto removeFromCart(UserDetails userDetails, UUID productId) {
+    public CartDto removeFromCart(User userDetails, UUID productId) {
         Cart cart = getCartByUsername(userDetails.getUsername());
 
         CartElement cartElement = getCartElementByProductIdAndCartId(productId, cart.getId());
@@ -75,7 +75,7 @@ public class CartService {
         return cartMapper.toDto(cart);
     }
 
-    public CartDto updateQuantity(UserDetails userDetails, UUID productId, CartQuantityReqDto cartQuantityReqDto) {
+    public CartDto updateQuantity(User userDetails, UUID productId, CartQuantityReqDto cartQuantityReqDto) {
         Cart cart = getCartByUsername(userDetails.getUsername());
 
         CartElement cartElement = getCartElementByProductIdAndCartId(productId, cart.getId());
@@ -103,8 +103,8 @@ public class CartService {
         return cartRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("Cart not found for this user"));
     }
 
-    public void clearCart(String username) {
-        Cart cart = getCartByUsername(username);
+    public void clearCart(User userDetails) {
+        Cart cart = getCartByUsername(userDetails.getUsername());
         cart.getCartElements().clear();
         cartRepository.save(cart);
     }

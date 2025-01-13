@@ -4,12 +4,12 @@ import com.example.demo.dto.user.ChangeUserRoleReqDto;
 import com.example.demo.dto.user.SearchUserResDto;
 import com.example.demo.dto.user.UpdateUserDto;
 import com.example.demo.dto.user.UserResDto;
+import com.example.demo.model.user.User;
 import com.example.demo.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<UserResDto> updateUser(@Valid @RequestBody UpdateUserDto updateReqDto, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<UserResDto> updateUser(@Valid @RequestBody UpdateUserDto updateReqDto, @AuthenticationPrincipal User userDetails) {
         return ResponseEntity.ok(userService.updateUser(userDetails, updateReqDto));
     }
 }
