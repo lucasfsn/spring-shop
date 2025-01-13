@@ -113,10 +113,10 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Set TOKEN\", function () {",
+							"pm.test(\"Set ADMIN TOKEN\", function () {",
 							"    const res = pm.response.json();",
 							"",
-							"    if (res.token) pm.collectionVariables.set(\"TOKEN\", res.token);",
+							"    if (res.token) pm.collectionVariables.set(\"TOKEN_ADMIN\", res.token);",
 							"    else throw new Error(\"Missing token\")",
 							"});"
 						],
@@ -200,7 +200,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{TOKEN}}",
+							"value": "{{TOKEN_ADMIN}}",
 							"type": "string"
 						}
 					]
@@ -369,7 +369,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{TOKEN}}",
+							"value": "{{TOKEN_ADMIN}}",
 							"type": "string"
 						}
 					]
@@ -408,7 +408,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{TOKEN}}",
+							"value": "{{TOKEN_ADMIN}}",
 							"type": "string"
 						}
 					]
@@ -441,7 +441,7 @@
 			"response": []
 		},
 		{
-			"name": "Pobieranie produktów Copy",
+			"name": "Pobieranie produktów",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -633,7 +633,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{TOKEN}}",
+							"value": "{{TOKEN_ADMIN}}",
 							"type": "string"
 						}
 					]
@@ -672,7 +672,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{TOKEN}}",
+							"value": "{{TOKEN_ADMIN}}",
 							"type": "string"
 						}
 					]
@@ -712,7 +712,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{TOKEN}}",
+							"value": "{{TOKEN_ADMIN}}",
 							"type": "string"
 						}
 					]
@@ -878,7 +878,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{TOKEN}}",
+							"value": "{{TOKEN_ADMIN}}",
 							"type": "string"
 						}
 					]
@@ -1027,7 +1027,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{TOKEN}}",
+							"value": "{{TOKEN_ADMIN}}",
 							"type": "string"
 						}
 					]
@@ -1036,7 +1036,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"status\": \"CONFIRMED\"\r\n}",
+					"raw": "{\r\n    \"status\": \"PENDING\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1132,6 +1132,10 @@
 		},
 		{
 			"key": "ORDER_ID",
+			"value": ""
+		},
+		{
+			"key": "TOKEN_ADMIN",
 			"value": ""
 		}
 	]
