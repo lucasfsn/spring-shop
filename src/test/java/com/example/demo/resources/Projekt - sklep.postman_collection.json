@@ -18,7 +18,13 @@
 							"",
 							"    if (res.token) pm.collectionVariables.set(\"TOKEN\", res.token);",
 							"    else throw new Error(\"Missing token\")",
-							"});"
+							"});",
+							"",
+							"pm.test(\"Set CUSTOMER_ID\", function () {",
+							"    const res = pm.response.json();",
+							"    if (res.user) pm.collectionVariables.set(\"CUSTOMER_ID\", res.user.id)",
+							"    else throw new Error(\"Missing user\")",
+							"})"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -302,48 +308,6 @@
 			"response": []
 		},
 		{
-			"name": "Pobieranie wszystkich kategorii",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{TOKEN}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/categories",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"categories"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Tworzenie kategorii",
 			"event": [
 				{
@@ -401,6 +365,48 @@
 			"response": []
 		},
 		{
+			"name": "Pobieranie wszystkich kategorii",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/categories",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Usuwanie kategorii",
 			"request": {
 				"auth": {
@@ -435,6 +441,63 @@
 						"api",
 						"categories",
 						"{{CATEGORY_ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Tworzenie produktu",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Set PRODUCT_ID\", function () {",
+							"    const res = pm.response.json();",
+							"",
+							"    if (res.id) pm.collectionVariables.set(\"PRODUCT_ID\", res.id);",
+							"    else throw new Error(\"Missing PRODUCT_ID\")",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN_ADMIN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Banan\",\r\n    \"description\": \"Premium luz\",\r\n    \"price\": 10.5,\r\n    \"available\": true,\r\n    \"quantity\": 100,\r\n    \"categories\": [\r\n        \"{{CATEGORY_ID}}\"\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products"
 					]
 				}
 			},
@@ -608,25 +671,7 @@
 			"response": []
 		},
 		{
-			"name": "Tworzenie produktu",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Set PRODUCT_ID\", function () {",
-							"    const res = pm.response.json();",
-							"",
-							"    if (res.id) pm.collectionVariables.set(\"PRODUCT_ID\", res.id);",
-							"    else throw new Error(\"Missing PRODUCT_ID\")",
-							"});",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
+			"name": "Pobieranie statystyk zamówień produktów użytkowników",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -638,19 +683,10 @@
 						}
 					]
 				},
-				"method": "POST",
+				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Banan\",\r\n    \"description\": \"Premium luz\",\r\n    \"price\": 10.5,\r\n    \"available\": true,\r\n    \"quantity\": 100,\r\n    \"categories\": [\r\n        \"{{CATEGORY_ID}}\"\r\n    ]\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "http://localhost:8080/api/products",
+					"raw": "http://localhost:8080/api/products/orders/stats?categoryName=Owoce&startDate",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -658,7 +694,19 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"products"
+						"products",
+						"orders",
+						"stats"
+					],
+					"query": [
+						{
+							"key": "categoryName",
+							"value": "Owoce"
+						},
+						{
+							"key": "startDate",
+							"value": null
+						}
 					]
 				}
 			},
@@ -736,6 +784,38 @@
 			"response": []
 		},
 		{
+			"name": "Dodawanie produktu do koszyka",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/cart/products/{{PRODUCT_ID}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"cart",
+						"products",
+						"{{PRODUCT_ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Pobieranie koszyka dla usera",
 			"request": {
 				"auth": {
@@ -766,7 +846,7 @@
 			"response": []
 		},
 		{
-			"name": "Dodawanie produktu do koszyka",
+			"name": "Zmiana ilości produktu w koszyku",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -778,8 +858,17 @@
 						}
 					]
 				},
-				"method": "POST",
+				"method": "PATCH",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"quantity\": 55\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "http://localhost:8080/api/cart/products/{{PRODUCT_ID}}",
 					"protocol": "http",
@@ -830,7 +919,25 @@
 			"response": []
 		},
 		{
-			"name": "Zmiana ilości produktu w koszyku",
+			"name": "Tworzenie zamówienia",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Set ORDER_ID\", function () {",
+							"    const res = pm.response.json();",
+							"",
+							"    if (res.id) pm.collectionVariables.set(\"ORDER_ID\", res.id);",
+							"    else throw new Error(\"Missing ORDER_ID\")",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -842,11 +949,11 @@
 						}
 					]
 				},
-				"method": "PATCH",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"quantity\": 15\r\n}",
+					"raw": "{\r\n  \"email\": \"customer@mail.com\",\r\n  \"phoneNumber\": \"123456789\",\r\n  \"street\": \"Main Street\",\r\n  \"houseNumber\": \"10\",\r\n  \"flatNumber\": \"53a\",\r\n  \"city\": \"Sample City\",\r\n  \"postalCode\": \"12-345\",\r\n  \"country\": \"Poland\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -854,7 +961,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/cart/products/{{PRODUCT_ID}}",
+					"raw": "http://localhost:8080/api/orders",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -862,9 +969,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"cart",
-						"products",
-						"{{PRODUCT_ID}}"
+						"orders"
 					]
 				}
 			},
@@ -932,63 +1037,6 @@
 			"response": []
 		},
 		{
-			"name": "Tworzenie zamówienia",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Set ORDER_ID\", function () {",
-							"    const res = pm.response.json();",
-							"",
-							"    if (res.id) pm.collectionVariables.set(\"ORDER_ID\", res.id);",
-							"    else throw new Error(\"Missing ORDER_ID\")",
-							"});",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{TOKEN}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"email\": \"customer@mail.com\",\r\n  \"phoneNumber\": \"123456789\",\r\n  \"street\": \"Main Street\",\r\n  \"houseNumber\": \"10\",\r\n  \"flatNumber\": \"53a\",\r\n  \"city\": \"Sample City\",\r\n  \"postalCode\": \"12-345\",\r\n  \"country\": \"Poland\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/orders",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"orders"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Pobieranie zamówienia",
 			"request": {
 				"auth": {
@@ -1036,7 +1084,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"status\": \"PENDING\"\r\n}",
+					"raw": "{\r\n    \"status\": \"CONFIRMED\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

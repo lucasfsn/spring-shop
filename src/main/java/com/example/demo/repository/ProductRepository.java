@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import com.example.demo.dto.product.ProductOrderStatsDto;
 import com.example.demo.model.product.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -7,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,4 +36,24 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     @Query("SELECT p FROM Product p LEFT JOIN FETCH p.categories WHERE p.id = :productId")
     Optional<Product> findProductById(@Param("productId") UUID productId);
+
+    @Query(value = "SELECT p.name as productName, c.name as categoryName, u.username as username, " +
+            "COUNT(oe.id) as orderCount, " +
+            "ROUND(COALESCE(SUM(oe.quantity * p.price), 0), 2) as totalOrderValue, " +
+            "ROUND(COALESCE(AVG(p.price), 0), 2) as averageProductPrice, " +
+            "ROUND(COALESCE(AVG(oe.quantity * p.price), 0), 2) as averageOrderPrice " +
+            "FROM PRODUCT p " +
+            "JOIN PRODUCT_CATEGORIES pc ON p.id = pc.products_id " +
+            "JOIN CATEGORY c ON pc.categories_id = c.id " +
+            "JOIN ORDER_ELEMENT oe ON p.id = oe.product_id " +
+            "JOIN ORDERS o ON oe.order_id = o.id " +
+            "JOIN USER u ON o.user_id = u.id " +
+            "WHERE (:categoryName IS NULL OR c.name = :categoryName) AND " +
+            "(:startDate IS NULL OR o.created_at >= :startDate) AND " +
+            "(:endDate IS NULL OR o.created_at <= :endDate) " +
+            "GROUP BY p.id, p.name, c.name, u.username " +
+            "ORDER BY SUM(oe.quantity * p.price) DESC", nativeQuery = true)
+    List<ProductOrderStatsDto> findProductOrderStatsByCategoryAndCreatedWithinDateRange(@Param("categoryName") String categoryName,
+                                                                                        @Param("startDate") LocalDateTime startDate,
+                                                                                        @Param("endDate") LocalDateTime endDate);
 }
