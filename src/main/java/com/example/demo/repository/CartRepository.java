@@ -15,7 +15,7 @@ public interface CartRepository extends JpaRepository<Cart, UUID> {
     @Query("SELECT c FROM Cart c " +
             "JOIN c.user u " +
             "LEFT JOIN FETCH c.cartElements ce " +
-            "LEFT JOIN FETCH ce.product p " +
+            "LEFT JOIN FETCH ce.product " +
             "WHERE u.username = :username")
     Optional<Cart> findByUsername(@Param("username") String username);
 

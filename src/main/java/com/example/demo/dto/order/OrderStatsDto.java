@@ -9,8 +9,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class OrderStatsDto {
     private String categoryName;
-    private Long orderCount;
-    private Double totalOrderValue;
+    private Long ordersCount;
+    private Double totalOrdersValue;
     private Double averageProductPrice;
     private Double averageOrderPrice;
     private Long totalQuantityOrdered;

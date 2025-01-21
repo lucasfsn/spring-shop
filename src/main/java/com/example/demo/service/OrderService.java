@@ -19,7 +19,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,31 +34,26 @@ public class OrderService {
     private final ProductService productService;
 
     public List<OrderAdminResDto> getOrdersFromAllUsers() {
-        List<Object[]> results = orderRepository.findAllUsersOrders();
-        Map<UUID, List<OrderWithTotalPriceDto>> userOrdersMap = new HashMap<>();
-
-        for (Object[] result : results) {
-            UUID userId = (UUID) result[0];
-            Order order = (Order) result[1];
-            Double totalPrice = (Double) result[2];
-            OrderWithTotalPriceDto orderWithTotalPrice = OrderWithTotalPriceDto.builder()
-                    .order(order)
-                    .totalPrice(totalPrice)
-                    .build();
-            userOrdersMap.computeIfAbsent(userId, k -> new ArrayList<>()).add(orderWithTotalPrice);
-        }
-
-        return userOrdersMap.entrySet().stream()
-                .map(entry -> {
-                    UUID userId = entry.getKey();
-                    List<OrderResDto> ordersDto = entry.getValue().stream()
-                            .map(orderWithTotalPrice -> orderMapper.toDto(orderWithTotalPrice.getOrder(), orderWithTotalPrice.getTotalPrice()))
-                            .toList();
-                    return OrderAdminResDto.builder()
-                            .userId(userId)
-                            .orders(ordersDto)
-                            .build();
-                })
+        return orderRepository.findAllUsersOrders().stream()
+                .collect(Collectors.groupingBy(
+                        OrderWithUserIdAndTotalPriceDto::getUserId,
+                        Collectors.mapping(
+                                dto -> OrderWithTotalPriceDto.builder()
+                                        .order(dto.getOrder())
+                                        .totalPrice(dto.getTotalPrice())
+                                        .build(),
+                                Collectors.toList()
+                        )
+                ))
+                .entrySet().stream()
+                .map(entry -> OrderAdminResDto.builder()
+                        .userId(entry.getKey())
+                        .orders(entry.getValue().stream()
+                                .map(order -> orderMapper.toDto(
+                                        order.getOrder(),
+                                        order.getTotalPrice()))
+                                .toList())
+                        .build())
                 .toList();
     }
 
@@ -72,9 +69,9 @@ public class OrderService {
     }
 
     public List<OrderResDto> getOrders(User userDetails) {
-        List<Object[]> results = orderRepository.findOrdersByUsername(userDetails.getUsername());
-        return results.stream()
-                .map(result -> orderMapper.toDto((Order) result[0], (Double) result[1]))
+        List<OrderWithTotalPriceDto> orders = orderRepository.findOrdersByUsername(userDetails.getUsername());
+        return orders.stream()
+                .map(order -> orderMapper.toDto(order.getOrder(), order.getTotalPrice()))
                 .toList();
     }
 
