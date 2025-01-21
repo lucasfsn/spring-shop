@@ -17,6 +17,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -56,6 +58,17 @@ public class OrderService {
                             .build();
                 })
                 .toList();
+    }
+
+    public List<OrderStatsDto> getOrderStats(String categoryName, LocalDate startDate, LocalDate endDate) {
+        LocalDateTime start = startDate != null ? startDate.atStartOfDay() : null;
+        LocalDateTime end = endDate != null ? endDate.atTime(23, 59, 59) : null;
+
+        if (start != null && end != null && end.isBefore(start)) {
+            throw new InvalidDataException("End date must be greater than or equal to start date");
+        }
+
+        return orderRepository.findOrderStatsByCategoryAndCreatedWithinDateRange(categoryName, start, end);
     }
 
     public List<OrderResDto> getOrders(User userDetails) {

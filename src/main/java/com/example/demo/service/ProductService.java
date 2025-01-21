@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.product.ProductOrderStatsDto;
 import com.example.demo.dto.product.ProductReqDto;
 import com.example.demo.dto.product.ProductResDto;
 import com.example.demo.dto.product.ProductSearchDto;
@@ -18,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,10 +37,6 @@ public class ProductService {
         Product product = getProductById(id);
 
         return productMapper.toDto(product);
-    }
-
-    public List<ProductOrderStatsDto> getProductOrderStats(String categoryName, LocalDateTime startDate, LocalDateTime endDate) {
-        return productRepository.findProductOrderStatsByCategoryAndCreatedWithinDateRange(categoryName, startDate, endDate);
     }
 
     public Page<ProductResDto> getProducts(ProductSearchDto searchDto) {

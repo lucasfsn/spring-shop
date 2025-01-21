@@ -5,11 +5,13 @@ import com.example.demo.model.user.User;
 import com.example.demo.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,6 +29,14 @@ public class OrderController {
     @GetMapping("/all")
     public ResponseEntity<List<OrderAdminResDto>> getOrdersFromAllUsers() {
         return ResponseEntity.ok(orderService.getOrdersFromAllUsers());
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<List<OrderStatsDto>> getOrderStats(
+            @RequestParam(required = false) String categoryName,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
+        return ResponseEntity.ok(orderService.getOrderStats(categoryName, startDate, endDate));
     }
 
     @GetMapping("/{id}")

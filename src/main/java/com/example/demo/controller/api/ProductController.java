@@ -1,6 +1,5 @@
 package com.example.demo.controller.api;
 
-import com.example.demo.dto.product.ProductOrderStatsDto;
 import com.example.demo.dto.product.ProductReqDto;
 import com.example.demo.dto.product.ProductResDto;
 import com.example.demo.dto.product.ProductSearchDto;
@@ -12,8 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -30,11 +27,6 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductResDto> getProduct(@PathVariable UUID id) {
         return ResponseEntity.ok(productService.getProduct(id));
-    }
-
-    @GetMapping("/orders/stats")
-    public ResponseEntity<List<ProductOrderStatsDto>> getProductOrderStats(@RequestParam(required = false) String categoryName, @RequestParam(required = false) LocalDateTime startDate, @RequestParam(required = false) LocalDateTime endDate) {
-        return ResponseEntity.ok(productService.getProductOrderStats(categoryName, startDate, endDate));
     }
 
     @DeleteMapping("/{id}")

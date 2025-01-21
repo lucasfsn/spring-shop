@@ -342,7 +342,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Owoce\"\r\n}",
+					"raw": "{\r\n    \"name\": \"Nabial\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -671,48 +671,6 @@
 			"response": []
 		},
 		{
-			"name": "Pobieranie statystyk zamówień produktów użytkowników",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{TOKEN_ADMIN}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/api/products/orders/stats?categoryName=Owoce&startDate",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"products",
-						"orders",
-						"stats"
-					],
-					"query": [
-						{
-							"key": "categoryName",
-							"value": "Owoce"
-						},
-						{
-							"key": "startDate",
-							"value": null
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Aktualizacja produktu",
 			"request": {
 				"auth": {
@@ -1031,6 +989,51 @@
 					"path": [
 						"api",
 						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pobieranie statystyk zamówień produktów użytkowników",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN_ADMIN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/orders/stats?categoryName=Warzywa&startDate=2025-01-21&endDate=2025-01-21",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"orders",
+						"stats"
+					],
+					"query": [
+						{
+							"key": "categoryName",
+							"value": "Warzywa"
+						},
+						{
+							"key": "startDate",
+							"value": "2025-01-21"
+						},
+						{
+							"key": "endDate",
+							"value": "2025-01-21"
+						}
 					]
 				}
 			},
