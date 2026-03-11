@@ -1,13 +1,16 @@
 package com.example.demo.mapper.cart;
 
-import com.example.demo.dto.cart.CartElementResDto;
-import com.example.demo.model.cart.Cart;
-import com.example.demo.model.cart.CartElement;
-import com.example.demo.model.product.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+import com.example.demo.dto.cart.CartElementResDto;
+import com.example.demo.mapper.category.CategoryMapper;
+import com.example.demo.model.cart.Cart;
+import com.example.demo.model.cart.CartElement;
+import com.example.demo.model.product.Product;.cart.CartElement;
+import com.example.demo.model.product.Product;
+
+@Mapper(componentModel = "spring", uses = { CategoryMapper.class })
 public interface CartElementMapper {
   @Mapping(source = "product.id", target = "productId")
   @Mapping(source = "product.name", target = "productName")

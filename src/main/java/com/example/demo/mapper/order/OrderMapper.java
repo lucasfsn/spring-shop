@@ -21,6 +21,7 @@ public interface OrderMapper {
   @Mapping(source = "totalPrice", target = "totalPrice")
   OrderResDto toDto(Order order, Double totalPrice);
 
+  @Mapping(target = "id", ignore = true)
   @Mapping(source = "deliveryInfoDto", target = "deliveryInfo")
   @Mapping(source = "user", target = "user")
   @Mapping(target = "createdAt", expression = "java(LocalDateTime.now())")
