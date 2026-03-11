@@ -4,48 +4,17 @@ import com.example.demo.dto.user.SearchUserResDto;
 import com.example.demo.dto.user.UserResDto;
 import com.example.demo.dto.user.UserSignupReqDto;
 import com.example.demo.model.user.User;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
 
-@Component
-public class UserMapper {
-    public UserResDto toDto(User user) {
-        if (user == null) {
-            return null;
-        }
+@Mapper(
+  componentModel = "spring",
+  unmappedTargetPolicy = ReportingPolicy.IGNORE
+)
+public interface UserMapper {
+  UserResDto toDto(User user);
 
-        return UserResDto.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .role(user.getRole())
-                .build();
-    }
+  SearchUserResDto toSearchDto(User user);
 
-    public SearchUserResDto toSearchDto(User user) {
-        if (user == null) {
-            return null;
-        }
-
-        return SearchUserResDto.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .username(user.getUsername())
-                .build();
-    }
-
-    public User toEntity(UserSignupReqDto userReqDto) {
-        if (userReqDto == null) {
-            return null;
-        }
-
-        return User.builder()
-                .firstName(userReqDto.getFirstName())
-                .lastName(userReqDto.getLastName())
-                .username(userReqDto.getUsername())
-                .email(userReqDto.getEmail())
-                .build();
-    }
+  User toEntity(UserSignupReqDto userSignupReqDto);
 }

@@ -1,31 +1,12 @@
 package com.example.demo.mapper.cart;
 
 import com.example.demo.dto.cart.CartDto;
-import com.example.demo.dto.cart.CartElementResDto;
 import com.example.demo.model.cart.Cart;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-@Component
-@RequiredArgsConstructor
-public class CartMapper {
-    private final CartElementMapper cartElementMapper;
-
-    public CartDto toDto(Cart cart) {
-        if (cart == null) {
-            return null;
-        }
-
-        List<CartElementResDto> cartElements = cart.getCartElements().stream()
-                .map(cartElementMapper::toDto)
-                .collect(Collectors.toList());
-
-        return CartDto.builder()
-                .id(cart.getId())
-                .elements(cartElements)
-                .build();
-    }
+@Mapper(componentModel = "spring", uses = { CartElementMapper.class })
+public interface CartMapper {
+  @Mapping(source = "cartElements", target = "elements")
+  CartDto toDto(Cart cart);
 }
