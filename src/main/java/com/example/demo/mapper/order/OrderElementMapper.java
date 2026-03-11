@@ -4,35 +4,20 @@ import com.example.demo.dto.order.OrderProductDto;
 import com.example.demo.model.cart.CartElement;
 import com.example.demo.model.order.Order;
 import com.example.demo.model.order.OrderElement;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-@Component
-@RequiredArgsConstructor
-public class OrderElementMapper {
-    public OrderElement toEntity(CartElement cartElement, Order order) {
-        if (cartElement == null || order == null) {
-            return null;
-        }
+@Mapper(componentModel = "spring")
+public interface OrderElementMapper {
+  @Mapping(target = "id", ignore = true)
+  @Mapping(source = "cartElement.product", target = "product")
+  @Mapping(source = "order", target = "order")
+  @Mapping(source = "cartElement.quantity", target = "quantity")
+  OrderElement toEntity(CartElement cartElement, Order order);
 
-        return OrderElement.builder()
-                .product(cartElement.getProduct())
-                .order(order)
-                .quantity(cartElement.getQuantity())
-                .build();
-    }
-
-    public OrderProductDto toDto(OrderElement entity) {
-        if (entity == null) {
-            return null;
-        }
-
-        return OrderProductDto.builder()
-                .id(entity.getProduct().getId())
-                .name(entity.getProduct().getName())
-                .description(entity.getProduct().getDescription())
-                .price(entity.getProduct().getPrice())
-                .quantity(entity.getQuantity())
-                .build();
-    }
+  @Mapping(source = "product.id", target = "id")
+  @Mapping(source = "product.name", target = "name")
+  @Mapping(source = "product.description", target = "description")
+  @Mapping(source = "product.price", target = "price")
+  OrderProductDto toDto(OrderElement entity);
 }
